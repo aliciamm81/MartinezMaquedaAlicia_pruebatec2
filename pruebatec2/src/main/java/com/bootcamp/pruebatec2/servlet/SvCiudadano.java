@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -52,7 +53,6 @@ public class SvCiudadano extends HttpServlet {
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -70,29 +70,53 @@ public class SvCiudadano extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
-        System.out.println("Entra");
+        String mensaje;
 
         String nombre = request.getParameter("validarNombre");
         String primerApellido = request.getParameter("validarPrimerApellido");
         String segundoApellido = request.getParameter("validarSegundoApellido");
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDate fechaNacimiento = LocalDate.parse(request.getParameter("validarFechaNacimiento"), formatter);
+        //  LocalDate fechaNacimiento = LocalDate.parse(request.getParameter("validarFechaNacimiento"), formatter);
+
+        LocalDate fechaNacimiento = null;
+        String fechaNacimientoStr = request.getParameter("validarFechaNacimiento");
+        if (!fechaNacimientoStr.isEmpty()) {
+            fechaNacimiento = LocalDate.parse(fechaNacimientoStr, formatter);
+        }
+
         String email = request.getParameter("validarEmail");
         String dni = request.getParameter("validarDni");
-        Integer telefono = Integer.valueOf(request.getParameter("validarTelefono"));
-        String direccion = request.getParameter("validarDireccion");
-        Ciudadano nuevoCiudadano = new Ciudadano(nombre, primerApellido, segundoApellido, fechaNacimiento, email, dni, telefono, direccion);
+        try {
+            Integer telefono = Integer.valueOf(request.getParameter("validarTelefono"));
+            String direccion = request.getParameter("validarDireccion");
+            Ciudadano nuevoCiudadano = new Ciudadano(nombre, primerApellido, segundoApellido, fechaNacimiento, email, dni, telefono, direccion);
 
-        boolean existe = controlador.agregarCiudadano(nuevoCiudadano);
-        if (existe) {
-            nuevoCiudadano = controlador.obtenerCiudadanoPorDni(nuevoCiudadano.getDni());
-        } else {
-            nuevoCiudadano = controlador.obtenerUltimoCiudadano();
+            try {
+                Ciudadano ciudadano = controlador.obtenerCiudadanoPorDni(nuevoCiudadano.getDni());
+                if (ciudadano == null) {
+                    controlador.agregarCiudadano(nuevoCiudadano);
+                    nuevoCiudadano = controlador.obtenerUltimoCiudadano();
+                } else {
+                    nuevoCiudadano = ciudadano;
+                }
+
+                HttpSession misession = request.getSession(true);
+                misession.setAttribute("ciudadano", nuevoCiudadano);
+                RequestDispatcher despachador = request.getRequestDispatcher("/SvTramite");
+                despachador.forward(request, response);
+            } catch (Exception e) {
+                System.out.println("paso por parla");
+                mensaje = "Todos los campos tienen que estar rellenos";
+                request.setAttribute("errorCiudadano", mensaje);
+                request.getRequestDispatcher("index.jsp").forward(request, response);
+
+            }
+        } catch (NumberFormatException e) {
+            mensaje = "Los datos en teléfono tienen que ser numéricos";
+            request.setAttribute("errorCiudadano", mensaje);
+            request.getRequestDispatcher("index.jsp").forward(request, response);
+
         }
-        HttpSession misession = request.getSession(true);
-        misession.setAttribute("ciudadano", nuevoCiudadano);
-        response.sendRedirect("index.jsp");
 
     }
 

@@ -4,27 +4,60 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 
 @Entity
+@Valid
 public class Ciudadano implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @Basic(optional = false)
+    @Column(nullable = false)
+    @NotBlank
     private String nombre;
+
+    @Basic(optional = false)
+    @Column(nullable = false)
+    @NotBlank
     private String primerApellido;
+
+    @Basic(optional = false)
+    @Column(nullable = false)
+    @NotBlank
     private String segundoApellido;
+
+    @Basic(optional = false)
+    @Column(nullable = false)
     private LocalDate fechaNacimiento;
+
+    @Basic(optional = false)
+    @Column(nullable = false)
+    @NotBlank
     private String email;
-    @Column(unique = true)
+
+    @Basic(optional = false)
+    @Column(unique = true, nullable = false)
+    @NotBlank
     private String dni;
+
+    @Basic(optional = false)
+    @Column(nullable = false)
     private Integer telefono;
+
+    @Basic(optional = false)
+    @Column(nullable = false)
+    @NotBlank
     private String direccion;
 
     @OneToMany(mappedBy = "ciudadano")

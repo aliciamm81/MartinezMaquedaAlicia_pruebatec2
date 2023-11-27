@@ -4,13 +4,15 @@
     Author     : Alicia
 --%>
 
+<%@page import="org.eclipse.persistence.exceptions.DatabaseException"%>
 <%@page import="com.bootcamp.pruebatec2.logica.Turno"%>
 <%@page import="java.util.List"%>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page contentType="text/html charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="UTF-8">   
+        <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
         <title>JSP Page</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     </head>
@@ -20,25 +22,25 @@
 
             <form action ="SvCiudadano" method="post" accept-charset="UTF-8" class="row g-3 needs-validation mt-3" novalidate>
                 <div class="col-md-3">
-                    <label for="validarNombre" class="form-label">Nombre</label>
-                    <input type="text" class="form-control" id="validarNombre" value="" name="validarNombre" required>
-                    <div class="valid-feedback">
-                        Looks good!
+                    <label for="validationServer01" class="form-label">Nombre</label>
+                    <input type="text" class="form-control" id="validationServer01"  name="validarNombre" required>
+
+                    <div class="invalid-feedback">
+                        <%=request.getAttribute("errorCiudadano")%>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <label for="validarPrimerApellido" class="form-label">Primer apellido</label>
-                    <input type="text" class="form-control" id="validarPrimerApellido" value="" name="validarPrimerApellido" required>
-                    <div class="valid-feedback">
-                        Looks good!
+                    <input type="text" class="form-control" id="validarPrimerApellido"  name="validarPrimerApellido" required>
+
+                    <div class="invalid-feedback">
+                        <%=request.getAttribute("errorCiudadano")%>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <label for="validarSegundoApellido" class="form-label">Segundo apellido</label>
-                    <input type="text" class="form-control" id="validarSegundoApellido" value="" name="validarSegundoApellido" required>
-                    <div class="valid-feedback">
-                        Looks good!
-                    </div>
+                    <input type="text" class="form-control" id="validarSegundoApellido"  name="validarSegundoApellido" required>
+
                 </div>
                 <div class="col-md-3">
                     <label for="validarFechaNacimiento" class="form-label">Fecha Nacimiento</label>
@@ -81,14 +83,6 @@
                     </div>
                 </div>
 
-
-                <div class="col-12">
-                    <button class="btn btn-primary" type="submit">Enviar</button>
-                </div>
-            </form>
-        </div>
-        <div class="container mt-3" style="width: 80%">
-            <form action ="SvTramite" method="post" accept-charset="UTF-8" class="row g-3 needs-validation mt-3" novalidate>
                 <div class="col-md-3">
                     <label for="nombreTramite" class="form-label">Tipo de trámite</label>
                     <select class="form-select" id="nombreTramite" required name="nombreTramite">
@@ -105,6 +99,7 @@
                     <div class="invalid-feedback">
                         Please select a valid state.
                     </div>
+
                 </div>
 
                 <div class="col-md-8">
@@ -114,38 +109,65 @@
                         Please provide a valid city.
                     </div>
                 </div>
-
-
-                <div class="col-12">
-                    <button class="btn btn-primary" type="submit">Enviar</button>
+                <div class="col-md-3">
+                    <label for="fechaTurno" class="form-label">Fecha del turno</label>
+                    <input type="date" class="form-control" id="fechaTurno" name="fechaTurno" required>
+                    <div class="invalid-feedback">
+                        Please provide a valid zip.
+                    </div>
                 </div>
-            </form>
-            <form action ="SvTurno" method="post" accept-charset="UTF-8" class="row g-3 needs-validation mt-3" novalidate>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" value="pendiente" name="estado" id="estado"  >
+                    <label class="form-check-label" for="estado">
+                        Pendiente
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" value="tramitado" name="estado" id="estado"  >
+                    <label class="form-check-label" for="estado">
+                        Tramitado
+                    </label>
+                </div>
                 <div class="col-12">
                     <button class="btn btn-primary" type="submit">Registrar turno</button>
+                    <% if (request.getAttribute("errorCiudadano") != null) {%>
+                    <div class="alert alert-danger d-flex align-items-center" role="alert">
+                        <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill"/></svg>
+                        <div >
+                            Ha ocurrido un error al agregar el ciudadano: <%= request.getAttribute("errorCiudadano")%>                    
+                        </div>
+                    </div>
+                    <%}%>                        
                 </div>
-            </form>  
+            </form> 
+
             <form action ="SvTurno" method="get" accept-charset="UTF-8" class="row g-3 needs-validation mt-3" novalidate>
-                 <div class="col-md-3">
+                <div class="col-md-3">
                     <label for="filtroFecha" class="form-label">Fecha turno</label>
                     <input type="date" class="form-control" id="filtroFecha" name="filtroFecha" required>
                     <div class="invalid-feedback">
                         Please provide a valid zip.
                     </div>
                 </div>
-                 <div class="form-check">
+                <div class="form-check">
                     <input class="form-check-input" type="radio" value="pendiente" name="estado" id="estado"  >
                     <label class="form-check-label" for="estado">
                         Pendiente
                     </label>
                 </div>
-                 <div class="form-check">
+                <div class="form-check">
                     <input class="form-check-input" type="radio" value="tramitado" name="estado" id="estado"  >
                     <label class="form-check-label" for="estado">
                         Tramitado
                     </label>
                 </div>
-               
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" value="completo" name="completo" id="completo"  >
+                    <label class="form-check-label" for="estado">
+                        Listado completo
+                    </label>
+                </div>
+
                 <div class="col-12">
                     <button class="btn btn-primary" type="submit">Mostrar turnos</button>
                 </div>

@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -19,6 +20,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.eclipse.persistence.exceptions.DatabaseException;
 
 /**
  *
@@ -46,7 +48,6 @@ public class SvTurno extends HttpServlet {
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -58,10 +59,22 @@ public class SvTurno extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        List<Turno> listaTurnos = new ArrayList<Turno>();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDate filtroFecha = LocalDate.parse(request.getParameter("filtroFecha"), formatter);
+        LocalDate filtroFecha = null;
+        String filtroFechaStr = request.getParameter("filtroFecha");
+        if (!filtroFechaStr.isEmpty()) {
+            filtroFecha = LocalDate.parse(filtroFechaStr, formatter);
+        }
         String estadoTramite = request.getParameter("estado");
-        List<Turno> listaTurnos = controladora.obtenerTurnoPorEstadoYFecha(filtroFecha, estadoTramite);
+        String obtenerCompleto = request.getParameter("completo");
+        if (obtenerCompleto != null) {
+            listaTurnos = controladora.obtenerTurno();
+        } else {
+            listaTurnos = controladora.obtenerTurnoPorEstadoYFecha(filtroFecha, estadoTramite);
+
+        }
+
         request.setAttribute("respuesta", listaTurnos);
         request.getRequestDispatcher("index.jsp").forward(request, response);
 
@@ -82,16 +95,30 @@ public class SvTurno extends HttpServlet {
         HttpSession misession = request.getSession();
         Ciudadano ciudadano = (Ciudadano) misession.getAttribute("ciudadano");
         Tramite tramite = (Tramite) misession.getAttribute("tramite");
+        String estado = request.getParameter("estado");
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate fechaTurno = null;
+        String fechaTurnosStr = request.getParameter("fechaTurno");
+        if (!fechaTurnosStr.isEmpty()) {
+            fechaTurno = LocalDate.parse(fechaTurnosStr, formatter);
+        }
+
         Turno turno = new Turno();
         turno.setCiudadano(ciudadano);
-        turno.setFecha(LocalDate.now());
+        turno.setFecha(fechaTurno);
         turno.setTramite(tramite);
-        turno.setEstado("pendiente");
+        turno.setEstado(estado);
         System.out.println("Turno: " + turno.toString());
-        controladora.agregarTurno(turno);
+        try {
+            controladora.agregarTurno(turno);
+
+        } catch (DatabaseException e) {
+            System.out.println("Faltan datos de turno");
+
+        }
         response.sendRedirect("index.jsp");
 
-        //  System.out.println(ciudadano.toString());
     }
 
     /**

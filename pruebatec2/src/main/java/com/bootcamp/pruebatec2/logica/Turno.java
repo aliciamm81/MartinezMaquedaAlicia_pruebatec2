@@ -2,20 +2,26 @@ package com.bootcamp.pruebatec2.logica;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import javax.persistence.Basic;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.validation.Valid;
 
 @Entity
+@Valid
 public class Turno implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Basic(optional = false)
+    @Column(nullable = false)
     private LocalDate fecha;
 
     @ManyToOne
@@ -23,11 +29,11 @@ public class Turno implements Serializable {
     private Tramite tramite;
 
     @ManyToOne
-    @JoinColumn(
-            name = "ID_CIUDADANO"
-    )
+    @JoinColumn(name = "ID_CIUDADANO")
     private Ciudadano ciudadano;
 
+    @Basic(optional = false)
+    @Column(nullable = false)
     private String estado;
 
     public Turno() {

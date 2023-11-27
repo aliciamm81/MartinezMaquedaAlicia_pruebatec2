@@ -10,10 +10,12 @@ import java.util.Comparator;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.NoResultException;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import org.eclipse.persistence.exceptions.DatabaseException;
 
 /**
  *
@@ -36,7 +38,7 @@ public class CiudadanoJpaControlador {
      *
      * @param nuevoCiudadano
      */
-    public boolean agregar(Ciudadano nuevoCiudadano) {
+    public void agregar(Ciudadano nuevoCiudadano) throws DatabaseException {
         EntityManager em = null;
 
         try {
@@ -44,14 +46,11 @@ public class CiudadanoJpaControlador {
             em.getTransaction().begin();
             em.persist(nuevoCiudadano);
             em.getTransaction().commit();
-            return false;
-        } catch (Exception e) {
-            return true;
+
         } finally {
             if (em != null) {
                 em.close();
             }
-
         }
 
     }
@@ -88,6 +87,9 @@ public class CiudadanoJpaControlador {
             cq.select(root).where(root.get("dni").in(new Object[]{dniCiudadano}));
             Query q = em.createQuery(cq);
             return (Ciudadano) q.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+
         } finally {
             if (em != null) {
                 em.close();

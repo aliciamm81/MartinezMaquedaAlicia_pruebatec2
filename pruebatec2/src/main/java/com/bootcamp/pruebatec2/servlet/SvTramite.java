@@ -10,12 +10,14 @@ import com.bootcamp.pruebatec2.persistencia.ControladorPersistencia;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.eclipse.persistence.exceptions.DatabaseException;
 
 /**
  *
@@ -88,11 +90,18 @@ public class SvTramite extends HttpServlet {
         //  controlador.agregarTurno(turno);
         // List<Turno> listaTurnos = Arrays.asList(turno);
         Tramite nuevoTramite = new Tramite(nombre, descripcion, listaTurnos);
-        controlador.agregarTramite(nuevoTramite);
+        try {
+
+            controlador.agregarTramite(nuevoTramite);
+        } catch (DatabaseException e) {
+            System.out.println("Faltan datos de tramite");
+        }
         nuevoTramite = controlador.obtenerUltimoTramite();
         System.out.println(nuevoTramite.toString());
         misession.setAttribute("tramite", nuevoTramite);
-        response.sendRedirect("index.jsp");
+        //  response.sendRedirect("index.jsp");
+        RequestDispatcher despachador = request.getRequestDispatcher("/SvTurno");
+        despachador.forward(request, response);
 
     }
 

@@ -13,6 +13,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaQuery;
+import org.eclipse.persistence.exceptions.DatabaseException;
 
 /**
  *
@@ -36,7 +37,7 @@ public class TramiteJpaControlador {
      *
      * @param nuevoTramite
      */
-    public void agregar(Tramite nuevoTramite) {
+    public void agregar(Tramite nuevoTramite) throws DatabaseException {
         EntityManager em = null;
 
         try {

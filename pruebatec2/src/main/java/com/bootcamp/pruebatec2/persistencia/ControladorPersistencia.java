@@ -9,6 +9,7 @@ import com.bootcamp.pruebatec2.logica.Tramite;
 import com.bootcamp.pruebatec2.logica.Turno;
 import java.time.LocalDate;
 import java.util.List;
+import org.eclipse.persistence.exceptions.DatabaseException;
 
 /**
  *
@@ -20,16 +21,16 @@ public class ControladorPersistencia {
     TurnoJpaControlador turnoJpa = new TurnoJpaControlador();
     TramiteJpaControlador tramiteJpa = new TramiteJpaControlador();
 
-    public void agregarTramite(Tramite nuevoTramite) {
+    public void agregarTramite(Tramite nuevoTramite) throws DatabaseException {
         tramiteJpa.agregar(nuevoTramite);
     }
 
-    public void agregarTurno(Turno nuevoTurno) {
+    public void agregarTurno(Turno nuevoTurno) throws DatabaseException {
         turnoJpa.agregar(nuevoTurno);
     }
 
-    public boolean agregarCiudadano(Ciudadano nuevoCiudadano) {
-        return ciudadanoJpa.agregar(nuevoCiudadano);
+    public void agregarCiudadano(Ciudadano nuevoCiudadano) throws DatabaseException {
+        ciudadanoJpa.agregar(nuevoCiudadano);
     }
 
     public List<Turno> obtenerTurno() {
