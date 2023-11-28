@@ -5,9 +5,9 @@
 package com.bootcamp.pruebatec2.servlet;
 
 import com.bootcamp.pruebatec2.logica.Ciudadano;
+import com.bootcamp.pruebatec2.logica.Controladora;
 import com.bootcamp.pruebatec2.logica.Tramite;
 import com.bootcamp.pruebatec2.logica.Turno;
-import com.bootcamp.pruebatec2.persistencia.ControladorPersistencia;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDate;
@@ -29,7 +29,7 @@ import org.eclipse.persistence.exceptions.DatabaseException;
 @WebServlet(name = "SvTurno", urlPatterns = {"/SvTurno"})
 public class SvTurno extends HttpServlet {
 
-    ControladorPersistencia controladora = new ControladorPersistencia();
+    Controladora controladora = new Controladora();
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -66,17 +66,16 @@ public class SvTurno extends HttpServlet {
         if (!filtroFechaStr.isEmpty()) {
             filtroFecha = LocalDate.parse(filtroFechaStr, formatter);
         }
-        String estadoTramite = request.getParameter("estado");
-        String obtenerCompleto = request.getParameter("completo");
-        if (obtenerCompleto != null) {
+        String filtro = request.getParameter("estado");
+        if (filtro.equals("completo")) {
             listaTurnos = controladora.obtenerTurno();
         } else {
-            listaTurnos = controladora.obtenerTurnoPorEstadoYFecha(filtroFecha, estadoTramite);
+            listaTurnos = controladora.obtenerTurnoPorEstadoYFecha(filtroFecha, filtro);
 
         }
 
         request.setAttribute("respuesta", listaTurnos);
-        request.getRequestDispatcher("index.jsp").forward(request, response);
+        request.getRequestDispatcher("table.jsp").forward(request, response);
 
     }
 
@@ -95,7 +94,6 @@ public class SvTurno extends HttpServlet {
         HttpSession misession = request.getSession();
         Ciudadano ciudadano = (Ciudadano) misession.getAttribute("ciudadano");
         Tramite tramite = (Tramite) misession.getAttribute("tramite");
-        String estado = request.getParameter("estado");
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate fechaTurno = null;
@@ -103,12 +101,11 @@ public class SvTurno extends HttpServlet {
         if (!fechaTurnosStr.isEmpty()) {
             fechaTurno = LocalDate.parse(fechaTurnosStr, formatter);
         }
-
         Turno turno = new Turno();
         turno.setCiudadano(ciudadano);
         turno.setFecha(fechaTurno);
         turno.setTramite(tramite);
-        turno.setEstado(estado);
+        turno.setEstado("En espera");
         System.out.println("Turno: " + turno.toString());
         try {
             controladora.agregarTurno(turno);

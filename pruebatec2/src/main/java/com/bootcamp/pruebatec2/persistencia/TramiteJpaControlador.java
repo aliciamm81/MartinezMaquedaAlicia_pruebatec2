@@ -5,8 +5,6 @@
 package com.bootcamp.pruebatec2.persistencia;
 
 import com.bootcamp.pruebatec2.logica.Tramite;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -37,7 +35,7 @@ public class TramiteJpaControlador {
      *
      * @param nuevoTramite
      */
-    public void agregar(Tramite nuevoTramite) throws DatabaseException {
+    public void agregarTramite(Tramite nuevoTramite) throws DatabaseException {
         EntityManager em = null;
 
         try {
@@ -53,17 +51,44 @@ public class TramiteJpaControlador {
         }
     }
 
-    public Tramite obtenerUltimo() {
-        EntityManager em = this.getEntityManager();
-        CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-        cq.select(cq.from(Tramite.class));
-        Query q = em.createQuery(cq);
-        List<Tramite> listaTramites = q.getResultList();
-        Tramite tramite = listaTramites.stream()
-                .sorted(Collections.reverseOrder(Comparator.comparing(Tramite::getId)))
-                .findFirst()
-                .orElseThrow();
-        return tramite;
-    }
+    /**
+     * Método que devuelve una lista de todos los tramites registrados en la
+     * base de datos
+     *
+     * @return List<Tramite>
+     */
+    public List<Tramite> obtenerTramites() {
 
+        EntityManager em = this.getEntityManager();
+        try {
+
+            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
+            cq.select(cq.from(Tramite.class));
+            Query q = em.createQuery(cq);
+            return q.getResultList();
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+
+///Con este método podría obtener el ultimo registro sin necesidad de hacer una lambda en
+// la clase controladora así obtendría el valor directamente filtrado de la base de datos
+//
+//    public Tramite obtenerUltimoTramiteAgregado() {
+//
+//        EntityManager em = this.getEntityManager();
+//        try {
+//            CriteriaBuilder cb = em.getCriteriaBuilder();
+//            CriteriaQuery<Tramite> cq = cb.createQuery(Tramite.class);
+//            Root<Tramite> root = cq.from(Tramite.class);
+//            cq.select(root).orderBy(cb.desc(root.get("id")));
+//            Query q = em.createQuery(cq).setMaxResults(1);
+//            return (Tramite) q.getSingleResult();
+//        } finally {
+//            if (em != null) {
+//                em.close();
+//            }
+//        }
+    }
 }

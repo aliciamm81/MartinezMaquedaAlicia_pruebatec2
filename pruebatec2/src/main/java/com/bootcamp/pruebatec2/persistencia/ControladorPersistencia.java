@@ -22,43 +22,47 @@ public class ControladorPersistencia {
     TramiteJpaControlador tramiteJpa = new TramiteJpaControlador();
 
     public void agregarTramite(Tramite nuevoTramite) throws DatabaseException {
-        tramiteJpa.agregar(nuevoTramite);
+        tramiteJpa.agregarTramite(nuevoTramite);
     }
 
     public void agregarTurno(Turno nuevoTurno) throws DatabaseException {
-        turnoJpa.agregar(nuevoTurno);
+        turnoJpa.agregarTurno(nuevoTurno);
     }
 
     public void agregarCiudadano(Ciudadano nuevoCiudadano) throws DatabaseException {
-        ciudadanoJpa.agregar(nuevoCiudadano);
+        ciudadanoJpa.agregarCiudadano(nuevoCiudadano);
+    }
+
+    public void modificarTurno(Turno turno) throws DatabaseException {
+        turnoJpa.modificarTurno(turno);
     }
 
     public List<Turno> obtenerTurno() {
-        return turnoJpa.obtener();
+        return turnoJpa.obtenerTurno();
     }
 
-    public Tramite obtenerUltimoTramite() {
-        return tramiteJpa.obtenerUltimo();
+    public List<Tramite> obtenerTramites() {
+        return tramiteJpa.obtenerTramites();
     }
 
-    public Ciudadano obtenerUltimoCiudadano() {
-        return ciudadanoJpa.obtenerUltimo();
+    public List<Ciudadano> obtenerCiudadanos() {
+        return ciudadanoJpa.obtenerCiudadanos();
     }
 
     public Ciudadano obtenerCiudadanoPorId(Integer idCiudadano) {
-        return ciudadanoJpa.obtenerPorId(idCiudadano);
+        return ciudadanoJpa.obtenerCiudadanoPorId(idCiudadano);
     }
 
     public Ciudadano obtenerCiudadanoPorDni(String dniCiudadano) {
-        return ciudadanoJpa.obtenerPorDni(dniCiudadano);
+        return ciudadanoJpa.obtenerCiudadanoPorDni(dniCiudadano);
     }
 
     public List<Turno> obtenerTurnoPorFecha(LocalDate fecha) {
-        return turnoJpa.obtenerPorFecha(fecha);
+        return turnoJpa.obtenerTurnoPorFecha(fecha);
     }
 
     public List<Turno> obtenerTurnoPorEstadoYFecha(LocalDate fecha, String estado) {
-        return turnoJpa.obtenerPorEstadoYFecha(fecha, estado);
+        return turnoJpa.obtenerTurnoPorEstadoYFecha(fecha, estado);
     }
 
 }

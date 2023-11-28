@@ -4,9 +4,9 @@
  */
 package com.bootcamp.pruebatec2.servlet;
 
+import com.bootcamp.pruebatec2.logica.Controladora;
 import com.bootcamp.pruebatec2.logica.Tramite;
 import com.bootcamp.pruebatec2.logica.Turno;
-import com.bootcamp.pruebatec2.persistencia.ControladorPersistencia;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
@@ -26,7 +26,7 @@ import org.eclipse.persistence.exceptions.DatabaseException;
 @WebServlet(name = "SvTramite", urlPatterns = {"/SvTramite"})
 public class SvTramite extends HttpServlet {
 
-    ControladorPersistencia controlador = new ControladorPersistencia();
+    Controladora controladora = new Controladora();
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -54,7 +54,6 @@ public class SvTramite extends HttpServlet {
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -84,22 +83,18 @@ public class SvTramite extends HttpServlet {
         String nombre = request.getParameter("nombreTramite");
         String descripcion = request.getParameter("descripcionTramite");
         HttpSession misession = request.getSession();
-        //  Ciudadano ciudadano = (Ciudadano) misession.getAttribute("ciudadano");
-        // Turno turno = new Turno(LocalDate.now(), ciudadano, "pendiente");
-        List<Turno> listaTurnos = controlador.obtenerTurno();
-        //  controlador.agregarTurno(turno);
-        // List<Turno> listaTurnos = Arrays.asList(turno);
+        List<Turno> listaTurnos = controladora.obtenerTurno();
+
         Tramite nuevoTramite = new Tramite(nombre, descripcion, listaTurnos);
         try {
 
-            controlador.agregarTramite(nuevoTramite);
+            controladora.agregarTramite(nuevoTramite);
         } catch (DatabaseException e) {
             System.out.println("Faltan datos de tramite");
         }
-        nuevoTramite = controlador.obtenerUltimoTramite();
+        nuevoTramite = controladora.obtenerUltimoTramiteAgregado();
         System.out.println(nuevoTramite.toString());
         misession.setAttribute("tramite", nuevoTramite);
-        //  response.sendRedirect("index.jsp");
         RequestDispatcher despachador = request.getRequestDispatcher("/SvTurno");
         despachador.forward(request, response);
 

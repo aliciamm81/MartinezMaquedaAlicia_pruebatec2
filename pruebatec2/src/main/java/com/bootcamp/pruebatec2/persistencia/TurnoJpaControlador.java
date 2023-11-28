@@ -39,7 +39,7 @@ public class TurnoJpaControlador {
      *
      * @param nuevoTurno
      */
-    public void agregar(Turno nuevoTurno) throws DatabaseException {
+    public void agregarTurno(Turno nuevoTurno) throws DatabaseException {
         EntityManager em = null;
 
         try {
@@ -54,21 +54,41 @@ public class TurnoJpaControlador {
         }
     }
 
-    public List<Turno> obtener() {
+    public void modificarTurno(Turno turno) throws DatabaseException {
+        EntityManager em = getEntityManager();
+        em.getTransaction().begin();
+        em.merge(turno);
+        em.getTransaction().commit();
+    }
+
+    /**
+     * Obtiene tods los registros que hay en la base de datos de la tabla Turno
+     * y los almacen en una lista de tipo Turno
+     *
+     * @return
+     */
+    public List<Turno> obtenerTurno() {
         EntityManager em = this.getEntityManager();
-        CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-        cq.select(cq.from(Turno.class));
-        Query q = em.createQuery(cq);
-        return q.getResultList();
+        try {
+
+            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
+            cq.select(cq.from(Turno.class));
+            Query q = em.createQuery(cq);
+            return q.getResultList();
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
     }
 
     /**
      * Recupera todos los turnos para una fecha específica
      *
-     * @param fecha
+     * @param List<Turno>
      * @return
      */
-    public List<Turno> obtenerPorFecha(LocalDate fecha) {
+    public List<Turno> obtenerTurnoPorFecha(LocalDate fecha) {
         EntityManager em = this.getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
@@ -90,7 +110,7 @@ public class TurnoJpaControlador {
      * @param estado
      * @return
      */
-    public List<Turno> obtenerPorEstadoYFecha(LocalDate fecha, String estado) {
+    public List<Turno> obtenerTurnoPorEstadoYFecha(LocalDate fecha, String estado) {
         EntityManager em = this.getEntityManager();
         try {
             CriteriaBuilder cb = em.getCriteriaBuilder();

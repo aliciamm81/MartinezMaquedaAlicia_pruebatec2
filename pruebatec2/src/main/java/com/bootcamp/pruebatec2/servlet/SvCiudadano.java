@@ -5,7 +5,7 @@
 package com.bootcamp.pruebatec2.servlet;
 
 import com.bootcamp.pruebatec2.logica.Ciudadano;
-import com.bootcamp.pruebatec2.persistencia.ControladorPersistencia;
+import com.bootcamp.pruebatec2.logica.Controladora;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDate;
@@ -25,7 +25,7 @@ import javax.servlet.http.HttpSession;
 @WebServlet(name = "SvCiudadano", urlPatterns = {"/SvCiudadano"})
 public class SvCiudadano extends HttpServlet {
 
-    ControladorPersistencia controlador = new ControladorPersistencia();
+    Controladora controladora = new Controladora();
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -92,10 +92,10 @@ public class SvCiudadano extends HttpServlet {
             Ciudadano nuevoCiudadano = new Ciudadano(nombre, primerApellido, segundoApellido, fechaNacimiento, email, dni, telefono, direccion);
 
             try {
-                Ciudadano ciudadano = controlador.obtenerCiudadanoPorDni(nuevoCiudadano.getDni());
+                Ciudadano ciudadano = controladora.obtenerCiudadanoPorDni(nuevoCiudadano.getDni());
                 if (ciudadano == null) {
-                    controlador.agregarCiudadano(nuevoCiudadano);
-                    nuevoCiudadano = controlador.obtenerUltimoCiudadano();
+                    controladora.agregarCiudadano(nuevoCiudadano);
+                    nuevoCiudadano = controladora.obtenerUltimoCiudadanoAgregado();
                 } else {
                     nuevoCiudadano = ciudadano;
                 }

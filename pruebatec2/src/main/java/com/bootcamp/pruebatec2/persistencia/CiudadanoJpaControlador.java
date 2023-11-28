@@ -5,8 +5,6 @@
 package com.bootcamp.pruebatec2.persistencia;
 
 import com.bootcamp.pruebatec2.logica.Ciudadano;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -38,7 +36,7 @@ public class CiudadanoJpaControlador {
      *
      * @param nuevoCiudadano
      */
-    public void agregar(Ciudadano nuevoCiudadano) throws DatabaseException {
+    public void agregarCiudadano(Ciudadano nuevoCiudadano) throws DatabaseException {
         EntityManager em = null;
 
         try {
@@ -52,7 +50,6 @@ public class CiudadanoJpaControlador {
                 em.close();
             }
         }
-
     }
 
     /**
@@ -61,7 +58,7 @@ public class CiudadanoJpaControlador {
      * @param idCiudadano
      * @return
      */
-    public Ciudadano obtenerPorId(Integer idCiudadano) {
+    public Ciudadano obtenerCiudadanoPorId(Integer idCiudadano) {
 
         EntityManager em = this.getEntityManager();
         try {
@@ -78,7 +75,15 @@ public class CiudadanoJpaControlador {
         }
     }
 
-    public Ciudadano obtenerPorDni(String dniCiudadano) {
+    /**
+     * Dado un dni de un ciudadano busca si existe en la base de datos, devuelve
+     * el el ciudadano que coincida con ese dni, si no hay ninguna coincidencia
+     * devuelve null
+     *
+     * @param dniCiudadano
+     * @return
+     */
+    public Ciudadano obtenerCiudadanoPorDni(String dniCiudadano) {
 
         EntityManager em = this.getEntityManager();
         try {
@@ -94,21 +99,43 @@ public class CiudadanoJpaControlador {
             if (em != null) {
                 em.close();
             }
-
         }
     }
 
-    public Ciudadano obtenerUltimo() {
+    /**
+     * Método que devuelve una lista de todos los ciudadanos registrados en la
+     * base de datos
+     *
+     * @return Ciudadano
+     */
+    public List<Ciudadano> obtenerCiudadanos() {
         EntityManager em = this.getEntityManager();
-        CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-        cq.select(cq.from(Ciudadano.class));
-        Query q = em.createQuery(cq);
-        List<Ciudadano> listaCiudadanos = q.getResultList();
-        Ciudadano ciudadano = listaCiudadanos.stream()
-                .sorted(Collections.reverseOrder(Comparator.comparing(Ciudadano::getId)))
-                .findFirst()
-                .orElseThrow();
-        return ciudadano;
+        try {
+            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
+            cq.select(cq.from(Ciudadano.class));
+            Query q = em.createQuery(cq);
+            return q.getResultList();
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
     }
+// Con este método podría obtener el ultimo registro sin necesidad de hacer una lambda en
+// la clase controladora así obtendría el valor directamente filtrado de la base de datos
+//    public Ciudadano obtenerUltimoCiudadanoAgregado() {
+//        EntityManager em = this.getEntityManager();
+//        try {
+//            CriteriaBuilder cb = em.getCriteriaBuilder();
+//            CriteriaQuery<Ciudadano> cq = cb.createQuery(Ciudadano.class);
+//            Root<Ciudadano> root = cq.from(Ciudadano.class);
+//            cq.select(root).orderBy(cb.desc(root.get("id")));
+//            Query q = em.createQuery(cq).setMaxResults(1);
+//            return (Ciudadano) q.getSingleResult();
+//        } finally {
+//            if (em != null) {
+//                em.close();
+//            }
+//        }
 
 }
