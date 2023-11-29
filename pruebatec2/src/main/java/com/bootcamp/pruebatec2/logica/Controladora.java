@@ -5,7 +5,9 @@
 package com.bootcamp.pruebatec2.logica;
 
 import com.bootcamp.pruebatec2.persistencia.ControladorPersistencia;
+import excepciones.CiudadanoException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -44,7 +46,7 @@ public class Controladora {
         Tramite tramite = listaTramites.stream()
                 .sorted(Collections.reverseOrder(Comparator.comparing(Tramite::getId)))
                 .findFirst()
-                .orElseThrow();
+                .orElse(null);
         return tramite;
 
     }
@@ -54,7 +56,7 @@ public class Controladora {
         Ciudadano ciudadano = listaCiudadanos.stream()
                 .sorted(Collections.reverseOrder(Comparator.comparing(Ciudadano::getId)))
                 .findFirst()
-                .orElseThrow();
+                .orElse(null);
         return ciudadano;
 
     }
@@ -81,9 +83,42 @@ public class Controladora {
         Turno turno = listaTurnos.stream()
                 .filter(p -> p.getId() == id)
                 .findFirst()
-                .orElse(turno = null);
+                .orElse(null);
         turno.setEstado(estado);
         modificarTurno(turno);
+    }
+
+    /**
+     *
+     * @param fechaString
+     * @return
+     */
+    public LocalDate formatearFecha(String fechaString) {
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate fecha = null;
+        if (!fechaString.isEmpty()) {
+            fecha = LocalDate.parse(fechaString, formatter);
+        }
+        return fecha;
+    }
+
+    public void validarCamposRellenos(String valor) throws CiudadanoException {
+
+        if (valor.isEmpty()) {
+            throw new CiudadanoException("Todos los campos tienen que estar rellenos ");
+        }
+    }
+
+    public Ciudadano obtenerCiudadanoExistente(Ciudadano nuevoCiudadano) {
+
+        Ciudadano ciudadano = obtenerCiudadanoPorDni(nuevoCiudadano.getDni());
+        if (ciudadano == null) {
+            controladora.agregarCiudadano(nuevoCiudadano);
+            return obtenerUltimoCiudadanoAgregado();
+        } else {
+            return ciudadano;
+        }
     }
 
 }

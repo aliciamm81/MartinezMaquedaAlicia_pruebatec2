@@ -71,6 +71,7 @@ public class SvTurnoEstado extends HttpServlet {
         Integer idCiudadano = Integer.valueOf(request.getParameter("idCiudadano"));
         controladora.modificarEstadoTurno(idCiudadano, modificarEstado);
         response.sendRedirect("http://localhost:8080/pruebatec2/SvTurno?filtroFecha=&estado=completo");
+
     }
 
     /**

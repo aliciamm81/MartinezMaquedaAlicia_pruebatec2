@@ -194,11 +194,11 @@
 
                                             <div class="col-12">
                                                 <button class="btn btn-primary" type="submit">Registrar turno</button>
-                                                <% if (request.getAttribute("errorCiudadano") != null) {%>
+                                                <% if (request.getAttribute("error") != null) {%>
                                                 <div class="alert alert-danger d-flex align-items-center" role="alert">
                                                     <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill"/></svg>
                                                     <div >
-                                                        Ha ocurrido un error al agregar el ciudadano: <%= request.getAttribute("errorCiudadano")%>                    
+                                                        Ha ocurrido un error: <%= request.getAttribute("error")%>                    
                                                     </div>
                                                 </div>
                                                 <%}%>                        

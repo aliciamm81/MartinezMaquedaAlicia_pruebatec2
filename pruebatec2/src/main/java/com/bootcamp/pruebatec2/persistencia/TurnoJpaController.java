@@ -21,11 +21,11 @@ import org.eclipse.persistence.exceptions.DatabaseException;
  *
  * @author Alicia
  */
-public class TurnoJpaControlador {
+public class TurnoJpaController {
 
     private EntityManagerFactory emf = null;
 
-    public TurnoJpaControlador() {
+    public TurnoJpaController() {
         this.emf = Persistence.createEntityManagerFactory("gestorTurnosDBJspPU");
     }
 

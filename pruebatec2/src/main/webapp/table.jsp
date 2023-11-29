@@ -100,7 +100,7 @@
                                 <!-- Illustrations -->
                                 <div class="card shadow mb-5">
                                     <div class="card-header py-3">
-                                        <h6 class="m-0 font-weight-bold text-primary">Crear turno</h6>
+                                        <h6 class="m-0 font-weight-bold text-primary">Listar turnos</h6>
                                     </div>
                                     <div class="card-body">
                                         <div class="container-fluid">
@@ -115,15 +115,15 @@
                                                 </div>
                                                 <div class="col-md-5 mt-5 ml-5">
                                                     <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="radio" value="pendiente" name="estado" id="estado">
+                                                        <input class="form-check-input" type="radio" value="Atendido" name="estado" id="estado">
                                                         <label class="form-check-label" for="estado">
-                                                            Pendiente
+                                                            Atendido
                                                         </label>
                                                     </div>
                                                     <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="radio" value="tramitado" name="estado" id="estado">
+                                                        <input class="form-check-input" type="radio" value="En espera" name="estado" id="estado">
                                                         <label class="form-check-label" for="estado">
-                                                            Tramitado
+                                                            En espera
                                                         </label>
                                                     </div>
                                                     <div class="form-check form-check-inline">
@@ -196,14 +196,11 @@
                                 <!-- Approach -->
                                 <div class="card shadow mb-4">
                                     <div class="card-header py-3">
-                                        <h6 class="m-0 font-weight-bold text-primary">Development Approach</h6>
+                                        <h6 class="m-0 font-weight-bold text-primary">Modo de uso</h6>
                                     </div>
                                     <div class="card-body">
-                                        <p>SB Admin 2 makes extensive use of Bootstrap 4 utility classes in order to reduce
-                                            CSS bloat and poor page performance. Custom CSS classes are used to create
-                                            custom components and custom utility classes.</p>
-                                        <p class="mb-0">Before working with this theme, you should become familiar with the
-                                            Bootstrap framework, especially the utility classes.</p>
+                                        <p>Para buscar un turno filtrado, introduce la fecha y una opción del estado que se quiere consultar, después hacer click en el botón de mostrar turnos</p>
+                                        <p class="mb-0">Para mostrar el listado completo hay que seleccionar la opción y hacer click en mostrar turnos sin necesidad de indicar una fecha</p>
                                     </div>
                                 </div>
 

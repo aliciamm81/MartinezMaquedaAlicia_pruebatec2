@@ -11,7 +11,6 @@ import com.bootcamp.pruebatec2.logica.Turno;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.ServletException;
@@ -20,7 +19,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import org.eclipse.persistence.exceptions.DatabaseException;
 
 /**
  *
@@ -59,13 +57,11 @@ public class SvTurno extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
         List<Turno> listaTurnos = new ArrayList<Turno>();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDate filtroFecha = null;
-        String filtroFechaStr = request.getParameter("filtroFecha");
-        if (!filtroFechaStr.isEmpty()) {
-            filtroFecha = LocalDate.parse(filtroFechaStr, formatter);
-        }
+
+        LocalDate filtroFecha = controladora.formatearFecha(request.getParameter("filtroFecha"));
+
         String filtro = request.getParameter("estado");
         if (filtro.equals("completo")) {
             listaTurnos = controladora.obtenerTurno();
@@ -94,26 +90,14 @@ public class SvTurno extends HttpServlet {
         HttpSession misession = request.getSession();
         Ciudadano ciudadano = (Ciudadano) misession.getAttribute("ciudadano");
         Tramite tramite = (Tramite) misession.getAttribute("tramite");
-
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDate fechaTurno = null;
-        String fechaTurnosStr = request.getParameter("fechaTurno");
-        if (!fechaTurnosStr.isEmpty()) {
-            fechaTurno = LocalDate.parse(fechaTurnosStr, formatter);
-        }
+        LocalDate fechaTurno = controladora.formatearFecha(request.getParameter("fechaTurno"));
         Turno turno = new Turno();
         turno.setCiudadano(ciudadano);
         turno.setFecha(fechaTurno);
         turno.setTramite(tramite);
         turno.setEstado("En espera");
-        System.out.println("Turno: " + turno.toString());
-        try {
-            controladora.agregarTurno(turno);
+        controladora.agregarTurno(turno);
 
-        } catch (DatabaseException e) {
-            System.out.println("Faltan datos de turno");
-
-        }
         response.sendRedirect("index.jsp");
 
     }

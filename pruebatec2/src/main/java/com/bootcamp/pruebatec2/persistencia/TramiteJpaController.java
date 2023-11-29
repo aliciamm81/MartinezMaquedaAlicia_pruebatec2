@@ -17,11 +17,11 @@ import org.eclipse.persistence.exceptions.DatabaseException;
  *
  * @author Alicia
  */
-public class TramiteJpaControlador {
+public class TramiteJpaController {
 
     private EntityManagerFactory emf = null;
 
-    public TramiteJpaControlador() {
+    public TramiteJpaController() {
         this.emf = Persistence.createEntityManagerFactory("gestorTurnosDBJspPU");
     }
 
@@ -72,23 +72,5 @@ public class TramiteJpaControlador {
             }
         }
 
-///Con este método podría obtener el ultimo registro sin necesidad de hacer una lambda en
-// la clase controladora así obtendría el valor directamente filtrado de la base de datos
-//
-//    public Tramite obtenerUltimoTramiteAgregado() {
-//
-//        EntityManager em = this.getEntityManager();
-//        try {
-//            CriteriaBuilder cb = em.getCriteriaBuilder();
-//            CriteriaQuery<Tramite> cq = cb.createQuery(Tramite.class);
-//            Root<Tramite> root = cq.from(Tramite.class);
-//            cq.select(root).orderBy(cb.desc(root.get("id")));
-//            Query q = em.createQuery(cq).setMaxResults(1);
-//            return (Tramite) q.getSingleResult();
-//        } finally {
-//            if (em != null) {
-//                em.close();
-//            }
-//        }
     }
 }

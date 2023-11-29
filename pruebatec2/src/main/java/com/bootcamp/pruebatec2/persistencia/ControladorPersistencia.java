@@ -17,9 +17,9 @@ import org.eclipse.persistence.exceptions.DatabaseException;
  */
 public class ControladorPersistencia {
 
-    CiudadanoJpaControlador ciudadanoJpa = new CiudadanoJpaControlador();
-    TurnoJpaControlador turnoJpa = new TurnoJpaControlador();
-    TramiteJpaControlador tramiteJpa = new TramiteJpaControlador();
+    CiudadanoJpaController ciudadanoJpa = new CiudadanoJpaController();
+    TurnoJpaController turnoJpa = new TurnoJpaController();
+    TramiteJpaController tramiteJpa = new TramiteJpaController();
 
     public void agregarTramite(Tramite nuevoTramite) throws DatabaseException {
         tramiteJpa.agregarTramite(nuevoTramite);

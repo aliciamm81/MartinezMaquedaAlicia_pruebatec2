@@ -19,11 +19,11 @@ import org.eclipse.persistence.exceptions.DatabaseException;
  *
  * @author Alicia
  */
-public class CiudadanoJpaControlador {
+public class CiudadanoJpaController {
 
     private EntityManagerFactory emf = null;
 
-    public CiudadanoJpaControlador() {
+    public CiudadanoJpaController() {
         this.emf = Persistence.createEntityManagerFactory("gestorTurnosDBJspPU");
     }
 

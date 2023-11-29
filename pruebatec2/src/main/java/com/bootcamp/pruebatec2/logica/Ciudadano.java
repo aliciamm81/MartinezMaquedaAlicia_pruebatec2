@@ -12,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.validation.Valid;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
 @Entity
@@ -44,6 +45,7 @@ public class Ciudadano implements Serializable {
     @Basic(optional = false)
     @Column(nullable = false)
     @NotBlank
+    @Email
     private String email;
 
     @Basic(optional = false)
@@ -155,7 +157,7 @@ public class Ciudadano implements Serializable {
 
     @Override
     public String toString() {
-        return "Id: " + id + " Nombre=" + nombre + " Apellidos: " + primerApellido + " " + segundoApellido + " Fecha Nacimiento: " + fechaNacimiento + " Email: " + email + " dni: " + dni + "Telefono: " + telefono + " Direccion: " + direccion;
+        return "Id: " + id + ", Nombre : " + nombre + " " + primerApellido + " " + segundoApellido + ", Email: " + email + ", DNI: " + dni + ", Telefono: " + telefono + ", Direccion: " + direccion;
     }
 
 }

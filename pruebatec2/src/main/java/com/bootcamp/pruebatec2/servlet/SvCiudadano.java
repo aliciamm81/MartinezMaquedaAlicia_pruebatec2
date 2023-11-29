@@ -9,7 +9,6 @@ import com.bootcamp.pruebatec2.logica.Controladora;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -70,54 +69,34 @@ public class SvCiudadano extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String mensaje;
 
-        String nombre = request.getParameter("validarNombre");
-        String primerApellido = request.getParameter("validarPrimerApellido");
-        String segundoApellido = request.getParameter("validarSegundoApellido");
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        //  LocalDate fechaNacimiento = LocalDate.parse(request.getParameter("validarFechaNacimiento"), formatter);
-
-        LocalDate fechaNacimiento = null;
-        String fechaNacimientoStr = request.getParameter("validarFechaNacimiento");
-        if (!fechaNacimientoStr.isEmpty()) {
-            fechaNacimiento = LocalDate.parse(fechaNacimientoStr, formatter);
-        }
-
-        String email = request.getParameter("validarEmail");
-        String dni = request.getParameter("validarDni");
         try {
+            String nombre = request.getParameter("validarNombre");
+            String primerApellido = request.getParameter("validarPrimerApellido");
+            String segundoApellido = request.getParameter("validarSegundoApellido");
+            LocalDate fechaNacimiento = controladora.formatearFecha(request.getParameter("validarFechaNacimiento"));
+            String email = request.getParameter("validarEmail");
+            String dni = request.getParameter("validarDni");
+            controladora.validarCamposRellenos(request.getParameter("validarTelefono"));
             Integer telefono = Integer.valueOf(request.getParameter("validarTelefono"));
+
             String direccion = request.getParameter("validarDireccion");
             Ciudadano nuevoCiudadano = new Ciudadano(nombre, primerApellido, segundoApellido, fechaNacimiento, email, dni, telefono, direccion);
+            nuevoCiudadano = controladora.obtenerCiudadanoExistente(nuevoCiudadano);
 
-            try {
-                Ciudadano ciudadano = controladora.obtenerCiudadanoPorDni(nuevoCiudadano.getDni());
-                if (ciudadano == null) {
-                    controladora.agregarCiudadano(nuevoCiudadano);
-                    nuevoCiudadano = controladora.obtenerUltimoCiudadanoAgregado();
-                } else {
-                    nuevoCiudadano = ciudadano;
-                }
+            HttpSession misession = request.getSession(true);
+            misession.setAttribute("ciudadano", nuevoCiudadano);
+            RequestDispatcher despachador = request.getRequestDispatcher("/SvTramite");
+            despachador.forward(request, response);
 
-                HttpSession misession = request.getSession(true);
-                misession.setAttribute("ciudadano", nuevoCiudadano);
-                RequestDispatcher despachador = request.getRequestDispatcher("/SvTramite");
-                despachador.forward(request, response);
-            } catch (Exception e) {
-                System.out.println("paso por parla");
-                mensaje = "Todos los campos tienen que estar rellenos";
-                request.setAttribute("errorCiudadano", mensaje);
-                request.getRequestDispatcher("index.jsp").forward(request, response);
-
+        } catch (Exception e) {
+            String mensaje = "Todos los campos tienen que estar rellenos y con valores correctos";
+            if (e instanceof NumberFormatException) {
+                mensaje = "Los datos en teléfono tienen que ser numéricos";
             }
-        } catch (NumberFormatException e) {
-            mensaje = "Los datos en teléfono tienen que ser numéricos";
-            request.setAttribute("errorCiudadano", mensaje);
+            request.setAttribute("error", mensaje);
             request.getRequestDispatcher("index.jsp").forward(request, response);
-
         }
-
     }
 
     @Override

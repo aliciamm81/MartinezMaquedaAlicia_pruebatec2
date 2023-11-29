@@ -17,7 +17,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import org.eclipse.persistence.exceptions.DatabaseException;
 
 /**
  *
@@ -86,14 +85,9 @@ public class SvTramite extends HttpServlet {
         List<Turno> listaTurnos = controladora.obtenerTurno();
 
         Tramite nuevoTramite = new Tramite(nombre, descripcion, listaTurnos);
-        try {
+        controladora.agregarTramite(nuevoTramite);
 
-            controladora.agregarTramite(nuevoTramite);
-        } catch (DatabaseException e) {
-            System.out.println("Faltan datos de tramite");
-        }
         nuevoTramite = controladora.obtenerUltimoTramiteAgregado();
-        System.out.println(nuevoTramite.toString());
         misession.setAttribute("tramite", nuevoTramite);
         RequestDispatcher despachador = request.getRequestDispatcher("/SvTurno");
         despachador.forward(request, response);
