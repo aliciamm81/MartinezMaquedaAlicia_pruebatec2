@@ -5,7 +5,6 @@
 package com.bootcamp.pruebatec2.logica;
 
 import com.bootcamp.pruebatec2.persistencia.ControladorPersistencia;
-import excepciones.CiudadanoException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
@@ -21,28 +20,99 @@ public class Controladora {
 
     ControladorPersistencia controladora = new ControladorPersistencia();
 
-    public void agregarTramite(Tramite nuevoTramite) throws DatabaseException {
-        controladora.agregarTramite(nuevoTramite);
+    /**
+     * Llama a la controladora de persistencia y le manda como parámetro el
+     * tramite que se quiere crear en la base de datos
+     *
+     * @param nuevoTramite
+     * @throws DatabaseException
+     */
+    public void createTramite(Tramite nuevoTramite) throws DatabaseException {
+        controladora.createTramite(nuevoTramite);
     }
 
-    public void agregarTurno(Turno nuevoTurno) throws DatabaseException {
-        controladora.agregarTurno(nuevoTurno);
+    /**
+     * Llama a la controladora de persistencia y le manda como parámetro el
+     * turno que se quiere crear en la base de datos
+     *
+     * @param nuevoTurno
+     * @throws DatabaseException
+     */
+    public void createTurno(Turno nuevoTurno) throws DatabaseException {
+        controladora.createTurno(nuevoTurno);
     }
 
-    public void agregarCiudadano(Ciudadano nuevoCiudadano) throws DatabaseException {
-        controladora.agregarCiudadano(nuevoCiudadano);
+    /**
+     *
+     * Llama a la controladora de persistencia y le manda como parámetro el
+     * ciudadano que se quiere crear en la base de datos* @param nuevoCiudadano
+     *
+     * @throws DatabaseException
+     */
+    public void createCiudadano(Ciudadano nuevoCiudadano) throws DatabaseException {
+        controladora.createCiudadano(nuevoCiudadano);
     }
 
-    public void modificarTurno(Turno tuno) throws DatabaseException {
-        controladora.modificarTurno(tuno);
+    /**
+     * Llama a la controladora de persistencia y le manda como parámetro el
+     * turno que se quiere modificar en la base de datos
+     *
+     * @param turno
+     * @throws DatabaseException
+     */
+    public void updateTurno(Turno turno) throws DatabaseException {
+        controladora.updateTurno(turno);
     }
 
-    public List<Turno> obtenerTurno() {
-        return controladora.obtenerTurno();
+    /**
+     * Llama a la controladora de persistencia y le solicita la lista de todos
+     * los turnos que existen en la base de datos
+     *
+     * @return
+     */
+    public List<Turno> findTurnos() {
+        return controladora.findTurnos();
     }
 
-    public Tramite obtenerUltimoTramiteAgregado() {
-        List<Tramite> listaTramites = controladora.obtenerTramites();
+    /**
+     * Devuelve el ciudadano que coincida con el id pasado como parámetro
+     *
+     * @param idCiudadano
+     * @return
+     */
+    public Ciudadano readCiudadano(Integer idCiudadano) {
+        return controladora.readCiudadano(idCiudadano);
+    }
+
+    /**
+     * Devuelve el ciudadano que coincida con el dni pasado como parámetro
+     *
+     * @param idCiudadano
+     * @return
+     */
+    public Ciudadano findCiudadanoByDni(String dniCiudadano) {
+        return controladora.findCiudadanoByDni(dniCiudadano);
+    }
+
+    /**
+     * Devuelve una lista de turnos que coincidan con el estado y la fecha
+     * pasadas como parámetro
+     *
+     * @param fecha
+     * @param estado
+     * @return
+     */
+    public List<Turno> findTurnosByFechaAndEstado(LocalDate fecha, String estado) {
+        return controladora.findTurnoByEstadoAndFecha(fecha, estado);
+    }
+
+    /**
+     * Devuelve el último trámite que se ha creado en la base de datos.
+     *
+     * @return
+     */
+    public Tramite findUltimoTramite() {
+        List<Tramite> listaTramites = controladora.findTramites();
         Tramite tramite = listaTramites.stream()
                 .sorted(Collections.reverseOrder(Comparator.comparing(Tramite::getId)))
                 .findFirst()
@@ -51,8 +121,13 @@ public class Controladora {
 
     }
 
-    public Ciudadano obtenerUltimoCiudadanoAgregado() {
-        List<Ciudadano> listaCiudadanos = controladora.obtenerCiudadanos();
+    /**
+     * Devuelve el último ciudadano que se ha creado en la base de datos.
+     *
+     * @return
+     */
+    public Ciudadano findUltimoCiudadano() {
+        List<Ciudadano> listaCiudadanos = controladora.findCiudadanos();
         Ciudadano ciudadano = listaCiudadanos.stream()
                 .sorted(Collections.reverseOrder(Comparator.comparing(Ciudadano::getId)))
                 .findFirst()
@@ -61,39 +136,34 @@ public class Controladora {
 
     }
 
-    public Ciudadano obtenerCiudadanoPorId(Integer idCiudadano) {
-        return controladora.obtenerCiudadanoPorId(idCiudadano);
-    }
+    /**
+     * Crea una lista con todos los turnos que hay en la base de datos y busca
+     * el elemento que coincida con el id y el estado pasado como parámetro, le
+     * setea el estado al elementro encontrado y llama al método que lo
+     * actualiza en la base de datos
+     *
+     * @param id
+     * @param estado
+     */
+    public void updateTurnoEstado(Integer id, String estado) {
 
-    public Ciudadano obtenerCiudadanoPorDni(String dniCiudadano) {
-        return controladora.obtenerCiudadanoPorDni(dniCiudadano);
-    }
-
-    public List<Turno> obtenerTurnoPorFecha(LocalDate fecha) {
-        return controladora.obtenerTurnoPorFecha(fecha);
-    }
-
-    public List<Turno> obtenerTurnoPorEstadoYFecha(LocalDate fecha, String estado) {
-        return controladora.obtenerTurnoPorEstadoYFecha(fecha, estado);
-    }
-
-    public void modificarEstadoTurno(Integer id, String estado) {
-
-        List<Turno> listaTurnos = obtenerTurno();
+        List<Turno> listaTurnos = findTurnos();
         Turno turno = listaTurnos.stream()
                 .filter(p -> p.getId() == id)
                 .findFirst()
                 .orElse(null);
         turno.setEstado(estado);
-        modificarTurno(turno);
+        updateTurno(turno);
     }
 
     /**
+     * Método que dada una fecha pasada como string la formatea según el orden
+     * indicado y la devuelve como un tipo LocalDate
      *
      * @param fechaString
      * @return
      */
-    public LocalDate formatearFecha(String fechaString) {
+    public LocalDate formatterFecha(String fechaString) {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate fecha = null;
@@ -103,19 +173,19 @@ public class Controladora {
         return fecha;
     }
 
-    public void validarCamposRellenos(String valor) throws CiudadanoException {
+    /**
+     * Método que valida se el ciudadano pasádo como parámetro existe en la base
+     * de datos
+     *
+     * @param nuevoCiudadano
+     * @return
+     */
+    public Ciudadano validateExisteCiudadano(Ciudadano nuevoCiudadano) {
 
-        if (valor.isEmpty()) {
-            throw new CiudadanoException("Todos los campos tienen que estar rellenos ");
-        }
-    }
-
-    public Ciudadano obtenerCiudadanoExistente(Ciudadano nuevoCiudadano) {
-
-        Ciudadano ciudadano = obtenerCiudadanoPorDni(nuevoCiudadano.getDni());
+        Ciudadano ciudadano = findCiudadanoByDni(nuevoCiudadano.getDni());
         if (ciudadano == null) {
-            controladora.agregarCiudadano(nuevoCiudadano);
-            return obtenerUltimoCiudadanoAgregado();
+            controladora.createCiudadano(nuevoCiudadano);
+            return findUltimoCiudadano();
         } else {
             return ciudadano;
         }

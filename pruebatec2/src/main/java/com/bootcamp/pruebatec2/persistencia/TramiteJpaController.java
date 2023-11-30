@@ -35,7 +35,7 @@ public class TramiteJpaController {
      *
      * @param nuevoTramite
      */
-    public void agregarTramite(Tramite nuevoTramite) throws DatabaseException {
+    public void createTramite(Tramite nuevoTramite) throws DatabaseException {
         EntityManager em = null;
 
         try {
@@ -57,7 +57,7 @@ public class TramiteJpaController {
      *
      * @return List<Tramite>
      */
-    public List<Tramite> obtenerTramites() {
+    public List<Tramite> findTramites() {
 
         EntityManager em = this.getEntityManager();
         try {

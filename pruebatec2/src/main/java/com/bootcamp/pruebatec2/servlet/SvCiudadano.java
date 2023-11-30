@@ -7,8 +7,6 @@ package com.bootcamp.pruebatec2.servlet;
 import com.bootcamp.pruebatec2.logica.Ciudadano;
 import com.bootcamp.pruebatec2.logica.Controladora;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.time.LocalDate;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -16,6 +14,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.eclipse.persistence.exceptions.DatabaseException;
 
 /**
  *
@@ -26,63 +25,46 @@ public class SvCiudadano extends HttpServlet {
 
     Controladora controladora = new Controladora();
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet SvCiudadano</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet SvCiudadano at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
+
     }
 
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
 
+    /**
+     * Procesa la solicitud POST para validar y registrar un nuevo ciudadano. Se
+     * obtienen los datos del formulario y se crea un nuevo objeto Ciudadano. Se
+     * verifica si ya existe un ciudadano con los mismos datos, en cuyo caso se
+     * redirecciona a la página de tramites. En caso de errores, como campos
+     * vacíos o datos incorrectos, se manejan las excepciones correspondientes y
+     * se redirecciona a la página principal con un mensaje de error específico.
+     *
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         try {
-            String nombre = request.getParameter("validarNombre");
-            String primerApellido = request.getParameter("validarPrimerApellido");
-            String segundoApellido = request.getParameter("validarSegundoApellido");
-            LocalDate fechaNacimiento = controladora.formatearFecha(request.getParameter("validarFechaNacimiento"));
-            String email = request.getParameter("validarEmail");
-            String dni = request.getParameter("validarDni");
-            controladora.validarCamposRellenos(request.getParameter("validarTelefono"));
-            Integer telefono = Integer.valueOf(request.getParameter("validarTelefono"));
+            Ciudadano nuevoCiudadano = new Ciudadano();
+            nuevoCiudadano.setNombre(request.getParameter("validarNombre"));
+            nuevoCiudadano.setPrimerApellido(request.getParameter("validarPrimerApellido"));
+            nuevoCiudadano.setSegundoApellido(request.getParameter("validarSegundoApellido"));
+            nuevoCiudadano.setFechaNacimiento(controladora.formatterFecha(request.getParameter("validarFechaNacimiento")));
+            nuevoCiudadano.setEmail(request.getParameter("validarEmail"));
+            nuevoCiudadano.setDni(request.getParameter("validarDni"));
+            nuevoCiudadano.setTelefono(Integer.valueOf(request.getParameter("validarTelefono")));
+            nuevoCiudadano.setDireccion(request.getParameter("validarDireccion"));
 
-            String direccion = request.getParameter("validarDireccion");
-            Ciudadano nuevoCiudadano = new Ciudadano(nombre, primerApellido, segundoApellido, fechaNacimiento, email, dni, telefono, direccion);
-            nuevoCiudadano = controladora.obtenerCiudadanoExistente(nuevoCiudadano);
+            nuevoCiudadano = controladora.validateExisteCiudadano(nuevoCiudadano);
 
             HttpSession misession = request.getSession(true);
             misession.setAttribute("ciudadano", nuevoCiudadano);
@@ -93,15 +75,17 @@ public class SvCiudadano extends HttpServlet {
             String mensaje = "Todos los campos tienen que estar rellenos y con valores correctos";
             if (e instanceof NumberFormatException) {
                 mensaje = "Los datos en teléfono tienen que ser numéricos";
+            } else if (e instanceof DatabaseException) {
+                mensaje = "Error en la base de datos";
             }
             request.setAttribute("error", mensaje);
-            request.getRequestDispatcher("index.jsp").forward(request, response);
+            request.getRequestDispatcher("home.jsp").forward(request, response);
         }
     }
 
     @Override
     public String getServletInfo() {
         return "Short description";
-    }// </editor-fold>
+    }
 
 }

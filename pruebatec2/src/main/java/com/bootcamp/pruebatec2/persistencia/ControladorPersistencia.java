@@ -13,6 +13,10 @@ import org.eclipse.persistence.exceptions.DatabaseException;
 
 /**
  *
+ * Gestiona operaciones en la base de datos para las entidades Tramite, Turno y
+ * Ciudadano. Contiene métodos para crear, leer, actualizar y buscar registros
+ * en la base de datos.
+ *
  * @author Alicia
  */
 public class ControladorPersistencia {
@@ -21,48 +25,48 @@ public class ControladorPersistencia {
     TurnoJpaController turnoJpa = new TurnoJpaController();
     TramiteJpaController tramiteJpa = new TramiteJpaController();
 
-    public void agregarTramite(Tramite nuevoTramite) throws DatabaseException {
-        tramiteJpa.agregarTramite(nuevoTramite);
+    public void createTramite(Tramite nuevoTramite) throws DatabaseException {
+        tramiteJpa.createTramite(nuevoTramite);
     }
 
-    public void agregarTurno(Turno nuevoTurno) throws DatabaseException {
-        turnoJpa.agregarTurno(nuevoTurno);
+    public void createTurno(Turno nuevoTurno) throws DatabaseException {
+        turnoJpa.createTurno(nuevoTurno);
     }
 
-    public void agregarCiudadano(Ciudadano nuevoCiudadano) throws DatabaseException {
-        ciudadanoJpa.agregarCiudadano(nuevoCiudadano);
+    public void createCiudadano(Ciudadano nuevoCiudadano) throws DatabaseException {
+        ciudadanoJpa.createCiudadano(nuevoCiudadano);
     }
 
-    public void modificarTurno(Turno turno) throws DatabaseException {
-        turnoJpa.modificarTurno(turno);
+    public void updateTurno(Turno turno) throws DatabaseException {
+        turnoJpa.updateTurno(turno);
     }
 
-    public List<Turno> obtenerTurno() {
-        return turnoJpa.obtenerTurno();
+    public List<Turno> findTurnos() {
+        return turnoJpa.findTurnos();
     }
 
-    public List<Tramite> obtenerTramites() {
-        return tramiteJpa.obtenerTramites();
+    public List<Tramite> findTramites() {
+        return tramiteJpa.findTramites();
     }
 
-    public List<Ciudadano> obtenerCiudadanos() {
-        return ciudadanoJpa.obtenerCiudadanos();
+    public List<Ciudadano> findCiudadanos() {
+        return ciudadanoJpa.findCiudadanos();
     }
 
-    public Ciudadano obtenerCiudadanoPorId(Integer idCiudadano) {
-        return ciudadanoJpa.obtenerCiudadanoPorId(idCiudadano);
+    public Ciudadano readCiudadano(Integer idCiudadano) {
+        return ciudadanoJpa.readCiudadano(idCiudadano);
     }
 
-    public Ciudadano obtenerCiudadanoPorDni(String dniCiudadano) {
-        return ciudadanoJpa.obtenerCiudadanoPorDni(dniCiudadano);
+    public Ciudadano findCiudadanoByDni(String dniCiudadano) {
+        return ciudadanoJpa.findCiudadanoByDni(dniCiudadano);
     }
 
-    public List<Turno> obtenerTurnoPorFecha(LocalDate fecha) {
-        return turnoJpa.obtenerTurnoPorFecha(fecha);
+    public List<Turno> findTurnoByDate(LocalDate fecha) {
+        return turnoJpa.findTurnoByDate(fecha);
     }
 
-    public List<Turno> obtenerTurnoPorEstadoYFecha(LocalDate fecha, String estado) {
-        return turnoJpa.obtenerTurnoPorEstadoYFecha(fecha, estado);
+    public List<Turno> findTurnoByEstadoAndFecha(LocalDate fecha, String estado) {
+        return turnoJpa.findTurnosByStateAndDate(fecha, estado);
     }
 
 }

@@ -36,7 +36,7 @@ public class CiudadanoJpaController {
      *
      * @param nuevoCiudadano
      */
-    public void agregarCiudadano(Ciudadano nuevoCiudadano) throws DatabaseException {
+    public void createCiudadano(Ciudadano nuevoCiudadano) throws DatabaseException {
         EntityManager em = null;
 
         try {
@@ -58,7 +58,7 @@ public class CiudadanoJpaController {
      * @param idCiudadano
      * @return
      */
-    public Ciudadano obtenerCiudadanoPorId(Integer idCiudadano) {
+    public Ciudadano readCiudadano(Integer idCiudadano) {
 
         EntityManager em = this.getEntityManager();
         try {
@@ -83,7 +83,7 @@ public class CiudadanoJpaController {
      * @param dniCiudadano
      * @return
      */
-    public Ciudadano obtenerCiudadanoPorDni(String dniCiudadano) {
+    public Ciudadano findCiudadanoByDni(String dniCiudadano) {
 
         EntityManager em = this.getEntityManager();
         try {
@@ -108,7 +108,7 @@ public class CiudadanoJpaController {
      *
      * @return Ciudadano
      */
-    public List<Ciudadano> obtenerCiudadanos() {
+    public List<Ciudadano> findCiudadanos() {
         EntityManager em = this.getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
@@ -121,21 +121,5 @@ public class CiudadanoJpaController {
             }
         }
     }
-// Con este método podría obtener el ultimo registro sin necesidad de hacer una lambda en
-// la clase controladora así obtendría el valor directamente filtrado de la base de datos
-//    public Ciudadano obtenerUltimoCiudadanoAgregado() {
-//        EntityManager em = this.getEntityManager();
-//        try {
-//            CriteriaBuilder cb = em.getCriteriaBuilder();
-//            CriteriaQuery<Ciudadano> cq = cb.createQuery(Ciudadano.class);
-//            Root<Ciudadano> root = cq.from(Ciudadano.class);
-//            cq.select(root).orderBy(cb.desc(root.get("id")));
-//            Query q = em.createQuery(cq).setMaxResults(1);
-//            return (Ciudadano) q.getSingleResult();
-//        } finally {
-//            if (em != null) {
-//                em.close();
-//            }
-//        }
 
 }

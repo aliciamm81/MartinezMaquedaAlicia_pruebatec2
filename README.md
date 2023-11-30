@@ -35,7 +35,8 @@ Para desplegar la aplicación en local se pueden seguir los siguiente pasos:
 2. Asegurarse de tener configurado un servidor compatible para alojar la base de datos.
 3. Ejecutar las migraciones de base de datos o scripts SQL proporcionados para crearla.
 4. Configurar un servidor de aplicaciones compatible, como Apache Tomcat, para desplegar la aplicación Java.
-5. Utilizar Maven u otra herramienta de gestión de dependencias para asegurar que todas las dependencias del proyecto estén instaladas y configuradas correctamente.
+5. Utilizar Maven u otra herramienta de gestión de dependencias para asegurar que todas las dependencias 
+del proyecto estén instaladas y configuradas correctamente.
 6. Compilar y ejecutar la aplicación utilizando un entorno de desarrollo integrado (IDE) o la línea de comandos.
 7. Acceder a la aplicación a través de un navegador web, utilizando la URL proporcionada por la aplicación desplegada en el servidor de aplicaciones.
 
@@ -44,6 +45,7 @@ Para desplegar la aplicación en local se pueden seguir los siguiente pasos:
 Es una aplicación web que permite a los usuarios gestionar turnos para diferentes trámites y ciudadanos.
 
 **Interfaz** 
+Al iniciar la aplicación se abre una página de bienvenida, para iniciar la aplicación hay que hacer click en "Entrar" 
 
 **Crear Turno:** Esta es la primera opción del menú lateral, al realizar click se abrirá un formulario que permite ingresar los detalles del nuevo turno. Una vez completado, al presionar el botón "Registrar Turno", se almacenará la información en la base de datos.
 
@@ -133,7 +135,28 @@ Se muestra una tabla con todos los turnos registrados en la base de datos.
 #### Resultado obtenido:
 Se muestran solo los turnos que cumplen con los criterios especificados en una tabla.
 
+## Futuras mejoras: 
+Con este método podría obtener el ultimo registro sin necesidad de hacer una lambda en
+la clase controladora así obtendría el valor directamente filtrado de la base de datos:
 
+```  
+   public Tramite obtenerUltimoTramiteAgregado() {
+       EntityManager em = this.getEntityManager();
+               try {
+            CriteriaBuilder cb = em.getCriteriaBuilder();
+            CriteriaQuery<Tramite> cq = cb.createQuery(Tramite.class);
+            Root<Tramite> root = cq.from(Tramite.class);
+            cq.select(root).orderBy(cb.desc(root.get("id")));
+            Query q = em.createQuery(cq).setMaxResults(1);
+            return (Tramite) q.getSingleResult();
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+      }
+
+```  
 ## Versionado 📌
 
 Versión: 1.0.0

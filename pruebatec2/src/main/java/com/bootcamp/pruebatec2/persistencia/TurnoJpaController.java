@@ -39,7 +39,7 @@ public class TurnoJpaController {
      *
      * @param nuevoTurno
      */
-    public void agregarTurno(Turno nuevoTurno) throws DatabaseException {
+    public void createTurno(Turno nuevoTurno) throws DatabaseException {
         EntityManager em = null;
 
         try {
@@ -54,7 +54,7 @@ public class TurnoJpaController {
         }
     }
 
-    public void modificarTurno(Turno turno) throws DatabaseException {
+    public void updateTurno(Turno turno) throws DatabaseException {
         EntityManager em = getEntityManager();
         em.getTransaction().begin();
         em.merge(turno);
@@ -67,7 +67,7 @@ public class TurnoJpaController {
      *
      * @return
      */
-    public List<Turno> obtenerTurno() {
+    public List<Turno> findTurnos() {
         EntityManager em = this.getEntityManager();
         try {
 
@@ -88,7 +88,7 @@ public class TurnoJpaController {
      * @param List<Turno>
      * @return
      */
-    public List<Turno> obtenerTurnoPorFecha(LocalDate fecha) {
+    public List<Turno> findTurnoByDate(LocalDate fecha) {
         EntityManager em = this.getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
@@ -110,7 +110,7 @@ public class TurnoJpaController {
      * @param estado
      * @return
      */
-    public List<Turno> obtenerTurnoPorEstadoYFecha(LocalDate fecha, String estado) {
+    public List<Turno> findTurnosByStateAndDate(LocalDate fecha, String estado) {
         EntityManager em = this.getEntityManager();
         try {
             CriteriaBuilder cb = em.getCriteriaBuilder();

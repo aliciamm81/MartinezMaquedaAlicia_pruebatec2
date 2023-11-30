@@ -11279,3 +11279,9 @@ footer.sticky-footer .copyright {
 body.sidebar-toggled footer.sticky-footer {
   width: 100%;
 }
+
+input[type="tel"]:invalid {
+    border-color: red; /* Cambia el borde del campo a rojo */
+    background-color: #ffeeee; /* Cambia el fondo del campo a un tono rojizo claro */
+    color: #dc3545; /* Cambia el color del texto a rojo oscuro */
+}

@@ -6,10 +6,7 @@ package com.bootcamp.pruebatec2.servlet;
 
 import com.bootcamp.pruebatec2.logica.Controladora;
 import com.bootcamp.pruebatec2.logica.Tramite;
-import com.bootcamp.pruebatec2.logica.Turno;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -27,40 +24,11 @@ public class SvTramite extends HttpServlet {
 
     Controladora controladora = new Controladora();
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet SvTramite</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet SvTramite at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
+
     }
 
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -68,7 +36,13 @@ public class SvTramite extends HttpServlet {
     }
 
     /**
-     * Handles the HTTP <code>POST</code> method.
+     * Este método procesa la solicitud HTTP POST enviada por el cliente. Crea
+     * un nuevo objeto Tramite a partir de los parámetros proporcionados por la
+     * solicitud Luego, lo almacena en la base de datos a través del
+     * controlador. Después de almacenar el objeto Tramite, obtiene el último
+     * Tramite creado. Establece este último Tramite como un atributo de la
+     * sesión actual para ser utilizado más tarde. Finalmente, redirige la
+     * solicitud hacia "/SvTurno"
      *
      * @param request servlet request
      * @param response servlet response
@@ -79,29 +53,23 @@ public class SvTramite extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        String nombre = request.getParameter("nombreTramite");
-        String descripcion = request.getParameter("descripcionTramite");
+        Tramite nuevoTramite = new Tramite();
+        nuevoTramite.setNombre(request.getParameter("nombreTramite"));
+        nuevoTramite.setDescripcion(request.getParameter("descripcionTramite"));
+
+        controladora.createTramite(nuevoTramite);
+
+        nuevoTramite = controladora.findUltimoTramite();
         HttpSession misession = request.getSession();
-        List<Turno> listaTurnos = controladora.obtenerTurno();
-
-        Tramite nuevoTramite = new Tramite(nombre, descripcion, listaTurnos);
-        controladora.agregarTramite(nuevoTramite);
-
-        nuevoTramite = controladora.obtenerUltimoTramiteAgregado();
         misession.setAttribute("tramite", nuevoTramite);
         RequestDispatcher despachador = request.getRequestDispatcher("/SvTurno");
         despachador.forward(request, response);
 
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
     @Override
     public String getServletInfo() {
         return "Short description";
-    }// </editor-fold>
+    }
 
 }

@@ -4,6 +4,7 @@
     Author     : Alicia
 --%>
 
+<%@page import="java.time.format.DateTimeFormatter"%>
 <%@page import="org.eclipse.persistence.exceptions.DatabaseException"%>
 <%@page import="com.bootcamp.pruebatec2.logica.Turno"%>
 <%@page import="java.util.List"%>
@@ -39,7 +40,7 @@
             <!-- Sidebar -->
             <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
                 <!-- Sidebar - Brand -->
-                <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.jsp">
+                <a class="sidebar-brand d-flex align-items-center justify-content-center" href="home.jsp">
                     <div class="sidebar-brand-icon rotate-n-15">
                         <i class="fas fa-ticket-alt"></i>
                     </div>
@@ -49,7 +50,7 @@
                 <hr class="sidebar-divider my-0">
                 <!-- Nav Item - Dashboard -->
                 <li class="nav-item active">
-                    <a class="nav-link" href="index.jsp">
+                    <a class="nav-link" href="home.jsp">
                         <i class="fas fa-fw fa-tachometer-alt"></i>
                         <span>Dashboard</span></a>
                 </li>
@@ -62,7 +63,7 @@
                 </div>
                 <!-- Nav Item - Charts -->
                 <li class="nav-item">
-                    <a class="nav-link" href="index.jsp">
+                    <a class="nav-link" href="home.jsp">
                         <i class="fas fa-fw fa-chart-area"></i>
                         <span>Crear turno</span></a>
                 </li>
@@ -107,37 +108,48 @@
 
                                             <!-- Page Heading -->
                                             <form action ="SvTurno" method="get" class="row g-4  needs-validation mt-1 align-items-start" novalidate>
+                                                <div class="row">
+                                                    <div class="card shadow mb-4">
+                                                        <div class="card-header py-3">
+                                                            <h6 class="m-0 font-weight-bold text-primary">Filtrado</h6>
+                                                        </div>
+                                                        <div class="card-body">
+                                                            <div class="form-check mb-3" style="width: 300px">
+                                                                <label for="filtroFecha" class="form-label">Fecha turno</label>
+                                                                <input type="date" class="form-control" id="filtroFecha" name="filtroFecha" required>
 
-                                                <div class="col-md-3 mb-4 ">
-                                                    <label for="filtroFecha" class="form-label">Fecha turno</label>
-                                                    <input type="date" class="form-control" id="filtroFecha" name="filtroFecha" required>
+                                                            </div>
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" type="radio" value="Atendido" name="estado" id="estado">
+                                                                <label class="form-check-label" for="estado">
+                                                                    Atendido
+                                                                </label>
+                                                            </div>
+                                                            <div class="form-check form-check-inline ">
+                                                                <input class="form-check-input" type="radio" value="En espera" name="estado" id="estado">
+                                                                <label class="form-check-label" for="estado">
+                                                                    En espera
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="card shadow mb-4">
+                                                        <div class="card-header py-3">
+                                                            <h6 class="m-0 font-weight-bold text-primary">Completo</h6>
+                                                        </div>
+                                                        <div class="card-body ml-3">
+                                                            <input class="form-check-input" type="radio" value="completo" name="estado" id="estado" checked>
+                                                            <label class="form-check-label" for="estado">
+                                                                Listado completo
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xl-2 col-md-5 mb-4 ">
+                                                        <button class="btn btn-primary" type="submit">Mostrar turnos</button>
+                                                    </div>
+
 
                                                 </div>
-                                                <div class="col-md-5 mt-5 ml-5">
-                                                    <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="radio" value="Atendido" name="estado" id="estado">
-                                                        <label class="form-check-label" for="estado">
-                                                            Atendido
-                                                        </label>
-                                                    </div>
-                                                    <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="radio" value="En espera" name="estado" id="estado">
-                                                        <label class="form-check-label" for="estado">
-                                                            En espera
-                                                        </label>
-                                                    </div>
-                                                    <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="radio" value="completo" name="estado" id="estado" checked>
-                                                        <label class="form-check-label" for="estado">
-                                                            Listado completo
-                                                        </label>
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-md-3 mt-5 text-end">
-                                                    <button class="btn btn-primary" type="submit">Mostrar turnos</button>
-                                                </div>
-
                                             </form>  
                                             <% if (request.getAttribute("respuesta") != null) {%>
                                             <!-- DataTales Example -->
@@ -153,8 +165,10 @@
                                                                     <th>Numero</th>
                                                                     <th>Fecha</th>
                                                                     <th>Estado</th>
-                                                                    <th>Ciudadano</th>
-                                                                    <th>Tramite</th>
+                                                                    <th>Id ciudadano</th>
+                                                                    <th>Nombre completo</th>
+                                                                    <th>Tipo trámite</th>
+                                                                    <th>Nombre trámite</th>
                                                                     <th>Modificar</th>
 
                                                                 </tr>
@@ -162,14 +176,16 @@
 
                                                             <tbody>
                                                                 <% for (Turno turno : (List<Turno>) request.getAttribute("respuesta")) {%>
-
                                                                 <tr>
                                                                     <td><%=turno.getId()%></td>
-                                                                    <td><%=turno.getFecha()%></td>
+                                                                    <td><%=turno.getFecha().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))%></td>
                                                                     <td><%=turno.getEstado()%></td>
-                                                                    <td><%=turno.getCiudadano()%></td>
-                                                                    <td><%=turno.getTramite()%></td>
-                                                                    <td>    <form action="SvTurnoEstado" method="post">
+                                                                    <td><%=turno.getCiudadano().getId()%></td>
+                                                                    <td><%=turno.getCiudadano().getNombre()%> <%=turno.getCiudadano().getPrimerApellido()%> <%=turno.getCiudadano().getSegundoApellido()%></td>
+                                                                    <td><%=turno.getTramite().getNombre()%></td>
+                                                                    <td><%=turno.getTramite().getDescripcion()%></td>
+                                                                    <td>    
+                                                                        <form action="SvTurnoEstado" method="post">
                                                                             <input type="hidden" class="form-control" id="idCiudadano" value="<%=turno.getId()%>" name="idCiudadano" required>
                                                                             <button type="submit" name="estado" value="En espera" class="btn btn-link">
                                                                                 <i class="fas fa-solid fa-clock fa-sm"></i> Espera
@@ -199,8 +215,8 @@
                                         <h6 class="m-0 font-weight-bold text-primary">Modo de uso</h6>
                                     </div>
                                     <div class="card-body">
-                                        <p>Para buscar un turno filtrado, introduce la fecha y una opción del estado que se quiere consultar, después hacer click en el botón de mostrar turnos</p>
-                                        <p class="mb-0">Para mostrar el listado completo hay que seleccionar la opción y hacer click en mostrar turnos sin necesidad de indicar una fecha</p>
+                                        <p>Para buscar un turno filtrado, ingresa la fecha y elige una opción de estado que deseas consultar. Luego, haz clic en el botón 'Mostrar turnos'.</p>
+                                        <p class="mb-0">Si prefieres ver el listado completo, simplemente selecciona la opción correspondiente y haz clic en 'Mostrar turnos', sin la necesidad de especificar una fecha.</p>
                                     </div>
                                 </div>
 

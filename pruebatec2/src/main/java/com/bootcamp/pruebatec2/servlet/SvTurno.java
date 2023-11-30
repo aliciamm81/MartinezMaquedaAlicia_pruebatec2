@@ -9,7 +9,6 @@ import com.bootcamp.pruebatec2.logica.Controladora;
 import com.bootcamp.pruebatec2.logica.Tramite;
 import com.bootcamp.pruebatec2.logica.Turno;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,43 +30,34 @@ public class SvTurno extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet SvTurno</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet SvTurno at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
+
     }
 
     /**
-     * Handles the HTTP <code>GET</code> method.
+     * Maneja las solicitudes GET para recuperar turnos basados en filtros de
+     * estado y fecha. Obtiene la fecha y estado proporcionados por el cliente y
+     * busca turnos que coincidan. Si el estado es 'completo', devuelve todos
+     * los turnos; de lo contrario, busca por estado y fecha. Establece los
+     * resultados en el objeto 'request' y reenvía a 'table.jsp' para su
+     * visualización.
      *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         List<Turno> listaTurnos = new ArrayList<Turno>();
-
-        LocalDate filtroFecha = controladora.formatearFecha(request.getParameter("filtroFecha"));
-
+        LocalDate filtroFecha = controladora.formatterFecha(request.getParameter("filtroFecha"));
         String filtro = request.getParameter("estado");
-        if (filtro.equals("completo")) {
-            listaTurnos = controladora.obtenerTurno();
-        } else {
-            listaTurnos = controladora.obtenerTurnoPorEstadoYFecha(filtroFecha, filtro);
 
+        if (filtro.equals("completo")) {
+            listaTurnos = controladora.findTurnos();
+        } else {
+            listaTurnos = controladora.findTurnosByFechaAndEstado(filtroFecha, filtro);
         }
 
         request.setAttribute("respuesta", listaTurnos);
@@ -76,7 +66,12 @@ public class SvTurno extends HttpServlet {
     }
 
     /**
-     * Handles the HTTP <code>POST</code> method.
+     *
+     * Este método procesa los datos enviados por el formulario para crear un
+     * nuevo turno. Obtiene la información del ciudadano y del trámite de la
+     * sesión actual y crea un nuevo turno con la fecha proporcionada por el
+     * formulario, estableciendo el estado como "En espera". Finalmente,
+     * redirige de vuelta a la página principal con un mensaje de confirmación.
      *
      * @param request servlet request
      * @param response servlet response
@@ -88,28 +83,21 @@ public class SvTurno extends HttpServlet {
             throws ServletException, IOException {
 
         HttpSession misession = request.getSession();
-        Ciudadano ciudadano = (Ciudadano) misession.getAttribute("ciudadano");
-        Tramite tramite = (Tramite) misession.getAttribute("tramite");
-        LocalDate fechaTurno = controladora.formatearFecha(request.getParameter("fechaTurno"));
+        LocalDate fechaTurno = controladora.formatterFecha(request.getParameter("fechaTurno"));
         Turno turno = new Turno();
-        turno.setCiudadano(ciudadano);
+        turno.setCiudadano((Ciudadano) misession.getAttribute("ciudadano"));
         turno.setFecha(fechaTurno);
-        turno.setTramite(tramite);
+        turno.setTramite((Tramite) misession.getAttribute("tramite"));
         turno.setEstado("En espera");
-        controladora.agregarTurno(turno);
-
-        response.sendRedirect("index.jsp");
+        controladora.createTurno(turno);
+        request.setAttribute("registroCorrecto", "El turno se ha registrado correctamente");
+        request.getRequestDispatcher("home.jsp").forward(request, response);
 
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
     @Override
     public String getServletInfo() {
         return "Short description";
-    }// </editor-fold>
+    }
 
 }
