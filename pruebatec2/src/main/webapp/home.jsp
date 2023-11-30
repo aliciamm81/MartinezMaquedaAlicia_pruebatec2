@@ -1,8 +1,3 @@
-<%-- 
-    Document   : home.jsp
-    Created on : 27 nov 2023, 15:07:47
-    Author     : Alicia
---%>
 
 <%@page import="org.eclipse.persistence.exceptions.DatabaseException"%>
 <%@page import="com.bootcamp.pruebatec2.logica.Turno"%>

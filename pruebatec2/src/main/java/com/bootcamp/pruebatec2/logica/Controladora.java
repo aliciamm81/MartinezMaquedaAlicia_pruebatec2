@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.bootcamp.pruebatec2.logica;
 
 import com.bootcamp.pruebatec2.persistencia.ControladorPersistencia;
@@ -12,10 +8,6 @@ import java.util.Comparator;
 import java.util.List;
 import org.eclipse.persistence.exceptions.DatabaseException;
 
-/**
- *
- * @author Alicia
- */
 public class Controladora {
 
     ControladorPersistencia controladora = new ControladorPersistencia();

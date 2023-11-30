@@ -1,8 +1,3 @@
-<%-- 
-    Document   : home
-    Created on : 29 nov 2023, 19:49:00
-    Author     : Alicia
---%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 

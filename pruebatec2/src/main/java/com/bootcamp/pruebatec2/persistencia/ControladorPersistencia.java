@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.bootcamp.pruebatec2.persistencia;
 
 import com.bootcamp.pruebatec2.logica.Ciudadano;
@@ -17,7 +13,6 @@ import org.eclipse.persistence.exceptions.DatabaseException;
  * Ciudadano. Contiene métodos para crear, leer, actualizar y buscar registros
  * en la base de datos.
  *
- * @author Alicia
  */
 public class ControladorPersistencia {
 

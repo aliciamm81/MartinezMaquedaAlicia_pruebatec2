@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.bootcamp.pruebatec2.persistencia;
 
 import com.bootcamp.pruebatec2.logica.Turno;
@@ -17,10 +13,6 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import org.eclipse.persistence.exceptions.DatabaseException;
 
-/**
- *
- * @author Alicia
- */
 public class TurnoJpaController {
 
     private EntityManagerFactory emf = null;
