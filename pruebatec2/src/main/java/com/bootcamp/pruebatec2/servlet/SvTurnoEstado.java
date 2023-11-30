@@ -48,7 +48,7 @@ public class SvTurnoEstado extends HttpServlet {
         String modificarEstado = request.getParameter("estado");
         Integer idCiudadano = Integer.valueOf(request.getParameter("idCiudadano"));
         controladora.updateTurnoEstado(idCiudadano, modificarEstado);
-        response.sendRedirect(URL + "SvTurno?filtroFecha=&estado=completo");
+        response.sendRedirect(URL + "SvTurno?filtroFecha=");
 
     }
 
