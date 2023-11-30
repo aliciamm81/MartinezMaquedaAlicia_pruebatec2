@@ -71,8 +71,9 @@ Para comprobar que cumple con lo establecido voy a realizar unos supuestos:
 #### Caso 1: Registro Exitoso de Turno
 
     Descripción: Se completa el formulario con datos válidos y se registra el turno.
-    Acciones:
+ 
 ```
+   Acciones:
         Nombre: Juan
         Primer Apellido: Pérez
         Segundo Apellido: García
@@ -92,9 +93,9 @@ El turno se registra correctamente en la base de datos.
 #### Caso 2: Registro de Turno con Datos Incompletos
 
     Descripción: Se intenta registrar un turno dejando campos obligatorios en blanco.
-    Acciones:
 
 ```    
+    Acciones:
         Nombre: Juan
         Primer Apellido: Pérez
         Fecha Nacimiento: 01/01/1990
@@ -117,9 +118,10 @@ Para comprobar que la aplicación permite listar los turnos en base a una fecha.
 #### Caso 1: Filtrar Turnos por Fecha 
 
     Descripción: El usuario aplica un filtro de fecha y estado para visualizar turnos específicos.
-    Acciones:
+  
 
 ```  
+  Acciones:
         Fecha: 2023-11-30
         Estado: "En Espera"
         Presiona el botón "Mostrar".
@@ -134,9 +136,10 @@ Se muestran solo los turnos que cumplen con los criterios especificados en una t
 Se ha añadido la opción de visualizar todos los turnos que hay en la base de datos sin ningún filtro. 
 
     Descripción: El usuario accede a la opción "Tabla de turnos" sin aplicar ningún filtro.
-    Acciones:
+    
 
 ```
+Acciones:
         Presiona el botón "Mostrar".  
 
 ```  
@@ -150,9 +153,10 @@ Se muestra una tabla con todos los turnos registrados en la base de datos.
 #### Caso 2: Filtrar Turnos por Fecha y Estado
 
     Descripción: El usuario aplica un filtro de fecha y estado para visualizar turnos específicos.
-    Acciones:
+
 
 ```  
+  Acciones:
         Fecha: 2023-11-30
         Estado: "Atendido"
         Presiona el botón "Mostrar".
@@ -167,38 +171,16 @@ Se muestran solo los turnos que cumplen con los criterios especificados en una t
 #### Caso 1: Modificar el estado de un turno
 
 Descripción: El usuario activa la opción de poner en Espera un turno.
-    Acciones:
+   
 
 ```  
+ Acciones:
         Presiona el botón "Espera".
 ```  
 
 #### Resultado obtenido:
 Se muestran el turno con el estado "Espera".
-
-
-## Futuras mejoras: 
-Con este método podría obtener el ultimo registro sin necesidad de hacer una lambda en
-la clase controladora así obtendría el valor directamente filtrado de la base de datos:
-
-```  
-   public Tramite obtenerUltimoTramiteAgregado() {
-       EntityManager em = this.getEntityManager();
-               try {
-            CriteriaBuilder cb = em.getCriteriaBuilder();
-            CriteriaQuery<Tramite> cq = cb.createQuery(Tramite.class);
-            Root<Tramite> root = cq.from(Tramite.class);
-            cq.select(root).orderBy(cb.desc(root.get("id")));
-            Query q = em.createQuery(cq).setMaxResults(1);
-            return (Tramite) q.getSingleResult();
-        } finally {
-            if (em != null) {
-                em.close();
-            }
-        }
-      }
-
-```  
+ 
 ## Versionado 📌
 
 Versión: 1.0.0
