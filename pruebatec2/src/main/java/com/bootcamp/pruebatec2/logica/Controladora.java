@@ -95,6 +95,17 @@ public class Controladora {
     }
 
     /**
+     * Devuelve una lista de turnos que coincidan con la fecha pasadas como
+     * parámetro
+     *
+     * @param fecha
+     * @return
+     */
+    public List<Turno> findTurnosByFecha(LocalDate fecha) {
+        return controladora.findTurnosByFecha(fecha);
+    }
+
+    /**
      * Devuelve una lista de turnos que coincidan con el estado y la fecha
      * pasadas como parámetro
      *
@@ -103,7 +114,7 @@ public class Controladora {
      * @return
      */
     public List<Turno> findTurnosByFechaAndEstado(LocalDate fecha, String estado) {
-        return controladora.findTurnoByEstadoAndFecha(fecha, estado);
+        return controladora.findTurnosByFechaAndEstado(fecha, estado);
     }
 
     /**

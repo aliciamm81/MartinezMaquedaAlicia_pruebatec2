@@ -61,12 +61,12 @@ public class ControladorPersistencia {
         return ciudadanoJpa.findCiudadanoByDni(dniCiudadano);
     }
 
-    public List<Turno> findTurnoByDate(LocalDate fecha) {
-        return turnoJpa.findTurnoByDate(fecha);
+    public List<Turno> findTurnosByFecha(LocalDate fecha) {
+        return turnoJpa.findTurnosByFecha(fecha);
     }
 
-    public List<Turno> findTurnoByEstadoAndFecha(LocalDate fecha, String estado) {
-        return turnoJpa.findTurnosByStateAndDate(fecha, estado);
+    public List<Turno> findTurnosByFechaAndEstado(LocalDate fecha, String estado) {
+        return turnoJpa.findTurnosByFechaAndEstado(fecha, estado);
     }
 
 }

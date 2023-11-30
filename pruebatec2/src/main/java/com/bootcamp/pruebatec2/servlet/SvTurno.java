@@ -34,12 +34,10 @@ public class SvTurno extends HttpServlet {
     }
 
     /**
-     * Maneja las solicitudes GET para recuperar turnos basados en filtros de
-     * estado y fecha. Obtiene la fecha y estado proporcionados por el cliente y
-     * busca turnos que coincidan. Si el estado es 'completo', devuelve todos
-     * los turnos; de lo contrario, busca por estado y fecha. Establece los
-     * resultados en el objeto 'request' y reenvía a 'table.jsp' para su
-     * visualización.
+     * Maneja una solicitud GET para filtrar la lista de turnos según los
+     * parámetros de fecha y estado. Los resultados se envían a 'table.jsp' como
+     * atributo 'respuesta' o 'error' para mostrar la lista de turnos o un
+     * mensaje respectivamente.
      *
      * @param request
      * @param response
@@ -52,15 +50,25 @@ public class SvTurno extends HttpServlet {
 
         List<Turno> listaTurnos = new ArrayList<Turno>();
         LocalDate filtroFecha = controladora.formatterFecha(request.getParameter("filtroFecha"));
-        String filtro = request.getParameter("estado");
+        String filtroEstado = request.getParameter("estado");
 
-        if (filtro.equals("completo")) {
+        String mensajeRequest = null;
+
+        if (filtroFecha == null && filtroEstado == null) {
             listaTurnos = controladora.findTurnos();
+        } else if (filtroFecha != null && filtroEstado == null) {
+            listaTurnos = controladora.findTurnosByFecha(filtroFecha);
+        } else if (filtroFecha != null && filtroEstado != null) {
+            listaTurnos = controladora.findTurnosByFechaAndEstado(filtroFecha, filtroEstado);
         } else {
-            listaTurnos = controladora.findTurnosByFechaAndEstado(filtroFecha, filtro);
+            mensajeRequest = "Selecciona la fecha por favor";
         }
 
-        request.setAttribute("respuesta", listaTurnos);
+        if (mensajeRequest != null) {
+            request.setAttribute("error", mensajeRequest);
+        } else {
+            request.setAttribute("respuesta", listaTurnos);
+        }
         request.getRequestDispatcher("table.jsp").forward(request, response);
 
     }

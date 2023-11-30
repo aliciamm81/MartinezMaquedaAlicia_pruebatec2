@@ -113,37 +113,41 @@
                                                         <div class="card-header py-3">
                                                             <h6 class="m-0 font-weight-bold text-primary">Filtrado</h6>
                                                         </div>
-                                                        <div class="card-body">
-                                                            <div class="form-check mb-3" style="width: 300px">
-                                                                <label for="filtroFecha" class="form-label">Fecha turno</label>
-                                                                <input type="date" class="form-control" id="filtroFecha" name="filtroFecha" required>
+                                                        <div class="row mt-3">
+                                                            <div class="col-md-4">
+                                                                <div class="form-check mb-3" style="width: 300px">
+                                                                    <label for="filtroFecha" class="form-label">Fecha turno</label>
+                                                                    <input type="date" class="form-control" id="filtroFecha" name="filtroFecha" required>
 
+                                                                </div>
+                                                            </div>                                          
+                                                            <div class="col-md-2 mt-4">
+                                                                <div class="form-check form-check-inline">
+                                                                    <input class="form-check-input" type="radio" value="Atendido" name="estado" id="estado">
+                                                                    <label class="form-check-label" for="estado">
+                                                                        Atendido
+                                                                    </label>
+                                                                </div>
                                                             </div>
-                                                            <div class="form-check form-check-inline">
-                                                                <input class="form-check-input" type="radio" value="Atendido" name="estado" id="estado">
-                                                                <label class="form-check-label" for="estado">
-                                                                    Atendido
-                                                                </label>
+                                                            <div class="col-md-2 mt-4">
+                                                                <div class="form-check form-check-inline ">
+                                                                    <input class="form-check-input" type="radio" value="En espera" name="estado" id="estado">
+                                                                    <label class="form-check-label" for="estado">
+                                                                        En espera
+                                                                    </label>
+                                                                </div>
                                                             </div>
-                                                            <div class="form-check form-check-inline ">
-                                                                <input class="form-check-input" type="radio" value="En espera" name="estado" id="estado">
-                                                                <label class="form-check-label" for="estado">
-                                                                    En espera
-                                                                </label>
+                                                            <% if (request.getAttribute("error") != null) {%>
+                                                            <div class="alert alert-danger d-flex align-items-center mt-3" role="alert">
+                                                                <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill"/></svg>
+                                                                <div >
+                                                                    <%= request.getAttribute("error")%>                    
+                                                                </div>
                                                             </div>
+                                                            <%}%>
                                                         </div>
                                                     </div>
-                                                    <div class="card shadow mb-4">
-                                                        <div class="card-header py-3">
-                                                            <h6 class="m-0 font-weight-bold text-primary">Completo</h6>
-                                                        </div>
-                                                        <div class="card-body ml-3">
-                                                            <input class="form-check-input" type="radio" value="completo" name="estado" id="estado" checked>
-                                                            <label class="form-check-label" for="estado">
-                                                                Listado completo
-                                                            </label>
-                                                        </div>
-                                                    </div>
+
                                                     <div class="col-xl-2 col-md-5 mb-4 ">
                                                         <button class="btn btn-primary" type="submit">Mostrar turnos</button>
                                                     </div>
@@ -216,7 +220,7 @@
                                     </div>
                                     <div class="card-body">
                                         <p>Para buscar un turno filtrado, ingresa la fecha y elige una opción de estado que deseas consultar. Luego, haz clic en el botón 'Mostrar turnos'.</p>
-                                        <p class="mb-0">Si prefieres ver el listado completo, simplemente selecciona la opción correspondiente y haz clic en 'Mostrar turnos', sin la necesidad de especificar una fecha.</p>
+                                        <p class="mb-0">Si prefieres ver el listado completo, puedes hacer click en el botón mostrar turnos sin seleccionar ningún filtro.</p>
                                     </div>
                                 </div>
 

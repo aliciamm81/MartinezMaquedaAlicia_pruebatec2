@@ -88,7 +88,7 @@ public class TurnoJpaController {
      * @param List<Turno>
      * @return
      */
-    public List<Turno> findTurnoByDate(LocalDate fecha) {
+    public List<Turno> findTurnosByFecha(LocalDate fecha) {
         EntityManager em = this.getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
@@ -110,7 +110,7 @@ public class TurnoJpaController {
      * @param estado
      * @return
      */
-    public List<Turno> findTurnosByStateAndDate(LocalDate fecha, String estado) {
+    public List<Turno> findTurnosByFechaAndEstado(LocalDate fecha, String estado) {
         EntityManager em = this.getEntityManager();
         try {
             CriteriaBuilder cb = em.getCriteriaBuilder();
