@@ -52,8 +52,9 @@ public class SvTurno extends HttpServlet {
         LocalDate filtroFecha = controladora.formatterFecha(request.getParameter("filtroFecha"));
         String filtroEstado = request.getParameter("estado");
 
+        // NOTA: He preferido hacer tres métodos de consulta directa a la base de datos porque considero que
+        // es más óptimo que hacer solo una consulta y un filtrado posterior con una lambda
         String mensajeRequest = null;
-
         if (filtroFecha == null && filtroEstado == null) {
             listaTurnos = controladora.findTurnos();
         } else if (filtroFecha != null && filtroEstado == null) {

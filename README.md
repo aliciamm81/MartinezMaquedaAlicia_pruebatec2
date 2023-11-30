@@ -11,7 +11,7 @@ una copia del proyecto en tu repositorio local y también conocerás el funciona
 
 ## Pre-requisitos 📋
 
-Para arrancar el proyecto es necesario tener instalado JDK 17, un entorno de desarrollo integrado (IDE) y un motor de
+Para arrancar el proyecto es necesario tener instalado JDK 17, un entorno de desarrollo integrado (IDE), un servidor de aplicaciones tipo Apache Tomcat y un motor de
 base
 de datos.
 
@@ -53,19 +53,21 @@ Al acceder a esta sección, se presentará un formulario detallado para ingresar
 
 **Listar Turnos:** Es la segunda opción del menú lateral, en esta opción se permite visualizar todos los turnos existentes. Al marcar la casilla "Mostrar", se desplegará una tabla con la lista de todos los turnos registrados en la base de datos.
 
-1. Listar Todos: Al seleccionar esta opción, se mostrará una tabla con todos los turnos existentes en la base de datos, detallando número, fecha, estado y ciudadano asignado.
+1. Listar Todos: Si no aplicas ningún filtro, al hacer click en "Mostrar" se lista una tabla con todos los turnos existentes en la base de datos, detallando número, fecha, estado y ciudadano asignado.
 
-2. Filtrado de Turnos: Aquí, puedes filtrar los turnos en base a una fecha específica y el estado del turno, ya sea "En Espera" o "Atendido". Para ello, introduce la fecha deseada y selecciona el estado del turno. Posteriormente, al hacer clic en "Mostrar", se mostrarán los turnos que cumplan con los criterios especificados.
+2. Filtrado de Turnos: Aquí, puedes filtrar los turnos en base a una fecha específica o en base a una fecha y estado del turno, ya sea "En Espera" o "Atendido". Para ello, introduce la fecha deseada y selecciona el estado del turno. Posteriormente, al hacer clic en "Mostrar", se mostrarán los turnos que cumplan con los criterios especificados. Si solo se desea ver el filtro por fecha, bastará con indicar una fechar y hacer click en "Mostrar".
 
 Dentro de esta tabla, al lado de cada registro, se dispone de la opción de modificar su estado de "En espera" y "Atendido", para ello hay que hacer click en el estado al que se quiere modificar y se cambiará automáticamente.  
-
 
 ## Pruebas ⚙️
 
 En esta sección realizaré una serie de pruebas que demostrarán si la aplicación puede realizar las funciones básicas
-de una base de datos **CRUD**.
+de la consigna. 
 
-### 1. Crear un turno
+### 1. Agregar un Nuevo Turno
+
+Para comprobar que cumple con lo establecido voy a realizar unos supuestos: 
+
 #### Caso 1: Registro Exitoso de Turno
 
     Descripción: Se completa el formulario con datos válidos y se registra el turno.
@@ -109,31 +111,71 @@ El turno se registra correctamente en la base de datos.
 Se muestra un mensaje de error indicando los campos obligatorios faltantes.
 
 ### 2. Listar turnos
-#### Caso 1: Visualizar Todos los Turnos Registrados
 
+Para comprobar que la aplicación permite listar los turnos en base a una fecha.
 
-    Descripción: El usuario accede a la opción "Listar Turnos" sin aplicar ningún filtro.
-    Acciones:
-```  
-        Selecciona la opción "Listar Todos".
-        Presiona el botón "Mostrar".
-
-```      
-#### Resultado obtenido: 
-Se muestra una tabla con todos los turnos registrados en la base de datos.
-
-#### Caso 2: Filtrar Turnos por Fecha y Estado
+#### Caso 1: Filtrar Turnos por Fecha 
 
     Descripción: El usuario aplica un filtro de fecha y estado para visualizar turnos específicos.
     Acciones:
+
 ```  
         Fecha: 2023-11-30
         Estado: "En Espera"
         Presiona el botón "Mostrar".
 
 ```  
+
 #### Resultado obtenido:
 Se muestran solo los turnos que cumplen con los criterios especificados en una tabla.
+
+#### Caso 2: Visualizar Todos los Turnos Registrados
+
+Se ha añadido la opción de visualizar todos los turnos que hay en la base de datos sin ningún filtro. 
+
+    Descripción: El usuario accede a la opción "Tabla de turnos" sin aplicar ningún filtro.
+    Acciones:
+
+```
+        Presiona el botón "Mostrar".  
+
+```  
+
+#### Resultado obtenido: 
+Se muestra una tabla con todos los turnos registrados en la base de datos.
+
+
+### 3. Filtrado de turnos
+
+#### Caso 2: Filtrar Turnos por Fecha y Estado
+
+    Descripción: El usuario aplica un filtro de fecha y estado para visualizar turnos específicos.
+    Acciones:
+
+```  
+        Fecha: 2023-11-30
+        Estado: "Atendido"
+        Presiona el botón "Mostrar".
+
+```  
+
+#### Resultado obtenido:
+Se muestran solo los turnos que cumplen con los criterios especificados en una tabla.
+
+### 4. Modificar el estado
+
+#### Caso 1: Modificar el estado de un turno
+
+Descripción: El usuario activa la opción de poner en Espera un turno.
+    Acciones:
+
+```  
+        Presiona el botón "Espera".
+```  
+
+#### Resultado obtenido:
+Se muestran el turno con el estado "Espera".
+
 
 ## Futuras mejoras: 
 Con este método podría obtener el ultimo registro sin necesidad de hacer una lambda en
